@@ -1,0 +1,1997 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<title>UNLISTED — the prop no sportsbook carries</title>
+<meta name="description" content="One specific prop every day on a real game. First exact answer wins a gift card.">
+<meta property="og:title" content="UNLISTED">
+<meta property="og:description" content="One prop. No sportsbook has this line. First exact answer wins.">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Teko:wght@600;700&family=Figtree:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+<style>
+* { box-sizing: border-box; -webkit-tap-highlight-color: transparent; margin: 0; padding: 0; }
+html, body { height: 100%; }
+html, body { height: 100%; }
+html { background: #0f1219; }
+body {
+  background: #0f1219;
+  color: #fff;
+  font-family: 'Figtree', -apple-system, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+.shell {
+  max-width: 430px;
+  margin: 0 auto;
+  height: 100vh;
+  height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  padding-bottom: calc(60px + env(safe-area-inset-bottom, 0px));
+}
+
+/* ─── HEADER ──────────────────────────────── */
+.top-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 13px 16px 11px;
+  background: #0f1219;
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  border-bottom: 1px solid rgba(255,255,255,.06);
+}
+.top-bar .logo {
+  font-family: 'Teko', sans-serif;
+  font-size: 24px;
+  font-weight: 700;
+  letter-spacing: .06em;
+  color: #fff;
+  line-height: 1;
+}
+.top-bar .logo span { color: #0066ff; }
+.top-bar .right {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.streak-tag {
+  background: rgba(255, 168, 0, .15);
+  border: 1px solid rgba(255,168,0,.3);
+  color: #ffa800;
+  font-size: 12px;
+  font-weight: 700;
+  border-radius: 20px;
+  padding: 4px 10px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+.hdr-btn {
+  background: #1d2638;
+  border: 1px solid rgba(255,255,255,.1);
+  color: rgba(255,255,255,.65);
+  border-radius: 8px;
+  width: 34px;
+  height: 34px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 11px;
+  font-weight: 700;
+  font-family: 'Figtree', sans-serif;
+  letter-spacing: .04em;
+}
+.hdr-btn:hover { background: #253247; color: #fff; }
+
+/* ─── SCROLL BODY ─────────────────────────── */
+.body-scroll {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+}
+.pane { display: none; padding: 14px 14px 20px; }
+.pane.active { display: block; }
+
+/* ─── PROP CARD ───────────────────────────── */
+.prop-card {
+  background: #161d28;
+  border-radius: 12px;
+  overflow: hidden;
+  border: 1px solid rgba(255,255,255,.07);
+}
+
+/* game hero — teams or player image */
+.game-hero {
+  background: linear-gradient(160deg, #1a2540 0%, #0f1825 100%);
+  padding: 18px 18px 14px;
+  position: relative;
+  overflow: hidden;
+  min-height: 90px;
+}
+.game-hero .hero-bg {
+  position: absolute;
+  inset: 0;
+  background-size: cover;
+  background-position: top center;
+  opacity: .18;
+  filter: blur(2px);
+}
+.game-hero .hero-bg::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to bottom, transparent 40%, #161d28 100%);
+}
+.game-meta {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 14px;
+}
+.sport-badge {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: #0066ff;
+  background: rgba(0,102,255,.15);
+  border: 1px solid rgba(0,102,255,.25);
+  border-radius: 4px;
+  padding: 3px 8px;
+}
+.game-time-tag {
+  font-size: 11px;
+  color: rgba(255,255,255,.45);
+  font-weight: 500;
+}
+
+/* MATCHUP — team logos */
+.matchup {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+.team-block {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  flex: 1;
+}
+.team-logo-wrap {
+  width: 52px;
+  height: 52px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.team-logo-wrap img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  filter: drop-shadow(0 2px 8px rgba(0,0,0,.5));
+}
+.team-logo-wrap .team-init {
+  width: 48px;
+  height: 48px;
+  background: rgba(255,255,255,.08);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Teko', sans-serif;
+  font-size: 18px;
+  font-weight: 700;
+  color: rgba(255,255,255,.55);
+}
+.team-abbr {
+  font-family: 'Figtree', sans-serif;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,.45);
+}
+.vs-col {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+  padding-top: 4px;
+}
+.at-sign {
+  font-family: 'Teko', sans-serif;
+  font-size: 28px;
+  font-weight: 600;
+  color: rgba(255,255,255,.2);
+  line-height: 1;
+}
+
+/* hero player image */
+.player-hero {
+  position: relative;
+  height: 130px;
+  overflow: hidden;
+}
+.player-hero img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: top;
+}
+.player-hero::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to bottom, rgba(15,18,25,0) 30%, #161d28 100%);
+}
+
+/* ─── PROP BODY ───────────────────────────── */
+.prop-body {
+  padding: 16px 18px 0;
+}
+.prop-eyebrow {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,.3);
+  margin-bottom: 8px;
+}
+.prop-question {
+  font-family: 'Teko', sans-serif;
+  font-size: clamp(24px, 6.5vw, 30px);
+  font-weight: 700;
+  color: #fff;
+  line-height: 1.15;
+  text-transform: uppercase;
+  letter-spacing: .01em;
+  margin-bottom: 18px;
+}
+
+/* ─── SCOREBOARD INPUT ─────────────────────── */
+.answer-zone {
+  padding: 0 18px;
+  margin-bottom: 14px;
+}
+.ans-label {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,.3);
+  margin-bottom: 8px;
+  display: block;
+}
+.scoreboard {
+  background: #060b14;
+  border: 1.5px solid rgba(0,102,255,.28);
+  border-radius: 8px;
+  padding: 16px 14px 10px;
+  text-align: center;
+  transition: border-color .18s, box-shadow .18s;
+  cursor: text;
+}
+.scoreboard:focus-within {
+  border-color: rgba(0,102,255,.7);
+  box-shadow: 0 0 0 3px rgba(0,102,255,.12);
+}
+.scoreboard input {
+  width: 100%;
+  background: transparent;
+  border: none;
+  outline: none;
+  font-family: 'Teko', sans-serif;
+  font-size: 54px;
+  font-weight: 700;
+  color: #0066ff;
+  text-align: center;
+  line-height: 1;
+  letter-spacing: 2px;
+  -moz-appearance: textfield;
+}
+.scoreboard input::-webkit-inner-spin-button,
+.scoreboard input::-webkit-outer-spin-button { -webkit-appearance: none; }
+.scoreboard input::placeholder { color: rgba(0,102,255,.25); }
+.scoreboard .hint {
+  font-size: 11px;
+  color: rgba(255,255,255,.25);
+  font-weight: 500;
+  letter-spacing: .03em;
+  margin-top: 4px;
+}
+
+/* ─── PRIZE CALLOUT ───────────────────────── */
+.prize-strip {
+  margin: 0 18px 14px;
+  background: rgba(255,168,0,.09);
+  border: 1px solid rgba(255,168,0,.2);
+  border-radius: 7px;
+  padding: 9px 13px;
+  display: flex;
+  align-items: center;
+  gap: 9px;
+}
+.prize-dot-anim {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #ffa800;
+  flex-shrink: 0;
+  animation: blink 1.8s ease-in-out infinite;
+}
+@keyframes blink { 0%,100%{opacity:1;} 50%{opacity:.2;} }
+.prize-strip .prize-line {
+  font-size: 12.5px;
+  font-weight: 600;
+  color: #ffa800;
+  line-height: 1.4;
+}
+.prize-strip .prize-line strong { color: #ffd060; }
+
+/* ─── ENTRY FORM ──────────────────────────── */
+.entry-form {
+  padding: 0 18px;
+  overflow: hidden;
+  max-height: 0;
+  opacity: 0;
+  transition: max-height .38s ease, opacity .3s ease;
+}
+.entry-form.visible { max-height: 240px; opacity: 1; }
+.field-row { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin-bottom: 10px; }
+.field { display: flex; flex-direction: column; gap: 5px; }
+.field label {
+  font-size: 9.5px;
+  font-weight: 700;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,.35);
+}
+.field input {
+  background: #1d2638;
+  border: 1px solid rgba(255,255,255,.1);
+  border-radius: 7px;
+  padding: 10px 12px;
+  font-family: 'Figtree', sans-serif;
+  font-size: 14px;
+  color: #fff;
+  outline: none;
+  width: 100%;
+}
+.field input:focus { border-color: rgba(0,102,255,.5); }
+.field input::placeholder { color: rgba(255,255,255,.25); }
+
+/* ─── SUBMIT BUTTON ───────────────────────── */
+.submit-wrap { padding: 0 18px 18px; }
+.submit-btn {
+  width: 100%;
+  background: #0066ff;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 14px;
+  font-family: 'Figtree', sans-serif;
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: .02em;
+  cursor: pointer;
+  transition: background .15s;
+}
+.submit-btn:hover { background: #0052cc; }
+.submit-btn:active { transform: scale(.98); }
+.submit-btn:disabled { background: #1d2638; color: rgba(255,255,255,.3); cursor: not-allowed; }
+.fine-print {
+  font-size: 10.5px;
+  color: rgba(255,255,255,.25);
+  text-align: center;
+  margin-top: 8px;
+  line-height: 1.5;
+}
+.fine-print a { color: rgba(255,255,255,.4); cursor: pointer; text-decoration: underline; }
+
+/* ─── LOCKED STATE ────────────────────────── */
+.result-card {
+  background: #161d28;
+  border-radius: 12px;
+  border: 1px solid rgba(255,255,255,.07);
+  overflow: hidden;
+}
+.result-status-bar {
+  padding: 12px 18px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  border-bottom: 1px solid rgba(255,255,255,.06);
+}
+.result-status-bar.locked { background: rgba(0,102,255,.12); }
+.result-status-bar.win { background: rgba(0,184,107,.12); }
+.result-status-bar.loss { background: rgba(232,50,74,.1); }
+.status-pill {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  padding: 4px 10px;
+  border-radius: 20px;
+}
+.status-pill.locked { background: rgba(0,102,255,.2); color: #5599ff; }
+.status-pill.win { background: rgba(0,184,107,.2); color: #00b86b; }
+.status-pill.loss { background: rgba(232,50,74,.18); color: #e8324a; }
+.status-sub {
+  font-size: 12.5px;
+  color: rgba(255,255,255,.5);
+}
+
+.result-body { padding: 18px; }
+.result-headline {
+  font-family: 'Teko', sans-serif;
+  font-size: 26px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: .02em;
+  color: #fff;
+  margin-bottom: 8px;
+  line-height: 1;
+}
+.result-sub {
+  font-size: 13.5px;
+  color: rgba(255,255,255,.55);
+  line-height: 1.55;
+  margin-bottom: 16px;
+}
+
+/* answer comparison */
+.compare-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+.compare-cell {
+  background: #1d2638;
+  border-radius: 8px;
+  padding: 12px 14px;
+}
+.cc-label {
+  font-size: 9.5px;
+  font-weight: 700;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,.3);
+  margin-bottom: 5px;
+}
+.cc-val {
+  font-family: 'Teko', sans-serif;
+  font-size: 26px;
+  font-weight: 700;
+  line-height: 1;
+  color: #fff;
+}
+.cc-val.correct { color: #00b86b; }
+.cc-val.wrong { color: #e8324a; }
+.cc-sub { font-size: 11px; color: rgba(255,255,255,.3); margin-top: 3px; }
+
+.locked-recap {
+  background: #1d2638;
+  border-radius: 8px;
+  padding: 12px 14px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16px;
+}
+.recap-left .label { font-size: 9.5px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: rgba(255,255,255,.3); margin-bottom: 4px; }
+.recap-left .val { font-family: 'Teko', sans-serif; font-size: 24px; font-weight: 700; color: #fff; line-height: 1; }
+.recap-left .sub { font-size: 11px; color: rgba(255,255,255,.3); margin-top: 2px; }
+.recap-right .label { font-size: 9.5px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: rgba(255,255,255,.3); margin-bottom: 4px; text-align: right; }
+.recap-right .val { font-family: 'Teko', sans-serif; font-size: 24px; font-weight: 700; color: rgba(255,255,255,.25); text-align: right; }
+
+.action-btn {
+  width: 100%;
+  border-radius: 8px;
+  padding: 13px;
+  font-family: 'Figtree', sans-serif;
+  font-size: 14.5px;
+  font-weight: 700;
+  letter-spacing: .01em;
+  cursor: pointer;
+  margin-bottom: 8px;
+  border: none;
+}
+.action-btn.primary { background: #0066ff; color: #fff; }
+.action-btn.primary:hover { background: #0052cc; }
+.action-btn.outline { background: transparent; color: #0066ff; border: 1.5px solid rgba(0,102,255,.45); }
+.action-btn.outline:hover { background: rgba(0,102,255,.08); }
+.action-btn.win-cta { background: #00b86b; color: #fff; }
+.action-btn.win-cta:hover { background: #00a05d; }
+.action-btn:active { transform: scale(.98); }
+
+.countdown-txt {
+  text-align: center;
+  font-size: 11.5px;
+  color: rgba(255,255,255,.3);
+  font-weight: 500;
+  margin-top: 6px;
+  letter-spacing: .02em;
+}
+.countdown-txt strong { color: rgba(255,255,255,.55); font-weight: 600; }
+
+/* ─── LEADERBOARD ─────────────────────────── */
+.lb-summary {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 8px;
+  margin-bottom: 16px;
+}
+.lb-sum-item {
+  background: #161d28;
+  border-radius: 9px;
+  padding: 11px 8px;
+  text-align: center;
+  border: 1px solid rgba(255,255,255,.06);
+}
+.lb-sum-num {
+  font-family: 'Teko', sans-serif;
+  font-size: 21px;
+  font-weight: 700;
+  color: #fff;
+  line-height: 1;
+}
+.lb-sum-lbl {
+  font-size: 9.5px;
+  font-weight: 600;
+  letter-spacing: .07em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,.3);
+  margin-top: 3px;
+}
+
+/* history feed */
+.history-item {
+  background: #161d28;
+  border-radius: 10px;
+  margin-bottom: 10px;
+  overflow: hidden;
+  border: 1px solid rgba(255,255,255,.06);
+}
+.hi-header {
+  padding: 11px 14px;
+  background: #1d2638;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.hi-day {
+  font-family: 'Teko', sans-serif;
+  font-size: 14px;
+  font-weight: 700;
+  color: rgba(255,255,255,.35);
+  letter-spacing: .04em;
+}
+.hi-sport-game {
+  font-size: 12.5px;
+  font-weight: 600;
+  color: rgba(255,255,255,.6);
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.answer-chip {
+  font-size: 11px;
+  font-weight: 700;
+  background: rgba(0,102,255,.2);
+  color: #5599ff;
+  border-radius: 4px;
+  padding: 3px 8px;
+  white-space: nowrap;
+  font-family: 'Figtree', sans-serif;
+}
+
+.hi-body { padding: 12px 14px 0; }
+.hi-q {
+  font-family: 'Teko', sans-serif;
+  font-size: 17px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: .02em;
+  color: #fff;
+  margin-bottom: 10px;
+  line-height: 1.2;
+}
+.hi-stats {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-bottom: 8px;
+}
+.hi-stat .n {
+  font-family: 'Teko', sans-serif;
+  font-weight: 700;
+  font-size: 17px;
+  color: #fff;
+  line-height: 1;
+}
+.hi-stat .l {
+  font-size: 9.5px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: .07em;
+  color: rgba(255,255,255,.3);
+  margin-top: 1px;
+}
+.hi-divider { width: 1px; height: 26px; background: rgba(255,255,255,.07); }
+.pct-bar { flex: 1; min-width: 60px; }
+.pct-track { height: 3px; background: rgba(255,255,255,.08); border-radius: 2px; margin-top: 7px; }
+.pct-fill { height: 3px; background: #0066ff; border-radius: 2px; }
+
+.hi-winner { font-size: 12px; color: #ffa800; font-weight: 600; margin-bottom: 10px; }
+.hi-no-winner { font-size: 12px; color: rgba(255,255,255,.3); margin-bottom: 10px; }
+
+.expand-btn {
+  width: 100%;
+  border: none;
+  background: transparent;
+  border-top: 1px solid rgba(255,255,255,.06);
+  padding: 9px 14px;
+  font-family: 'Figtree', sans-serif;
+  font-size: 10.5px;
+  font-weight: 700;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,.3);
+  cursor: pointer;
+  text-align: left;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.expand-btn:hover { color: rgba(255,255,255,.5); background: rgba(255,255,255,.03); }
+.expand-btn .arr { transition: transform .25s ease; }
+.expand-btn.open .arr { transform: rotate(180deg); }
+
+.breakdown-panel {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height .35s ease;
+  background: #0f1219;
+}
+.breakdown-panel.open { max-height: 500px; }
+.bp-inner { padding: 14px; }
+.bp-label {
+  font-size: 9.5px;
+  font-weight: 700;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,.3);
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.bp-insight { font-style: italic; text-transform: none; letter-spacing: .01em; font-weight: 400; color: rgba(255,255,255,.4); }
+
+/* answer bar chart */
+.a-bar { display: flex; align-items: center; gap: 8px; margin-bottom: 7px; }
+.a-bar-ans {
+  font-family: 'Figtree', sans-serif;
+  font-size: 11.5px;
+  font-weight: 600;
+  color: rgba(255,255,255,.7);
+  min-width: 56px;
+  text-align: right;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.a-bar-track {
+  flex: 1;
+  background: #1d2638;
+  border-radius: 3px;
+  overflow: hidden;
+  height: 20px;
+  position: relative;
+}
+.a-bar-fill {
+  height: 100%;
+  background: #1d2638;
+  border-radius: 3px;
+  min-width: 6px;
+  background: rgba(255,255,255,.12);
+  transition: width .5s ease;
+}
+.a-bar-fill.correct-bar { background: rgba(0,184,107,.25); }
+.a-bar-count {
+  font-size: 11.5px;
+  font-weight: 600;
+  color: rgba(255,255,255,.45);
+  min-width: 26px;
+  text-align: right;
+}
+.a-bar-tag {
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  color: #00b86b;
+  white-space: nowrap;
+}
+
+/* number stats */
+.num-stats-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 7px;
+  margin-top: 12px;
+}
+.ns-box {
+  background: #161d28;
+  border-radius: 7px;
+  padding: 10px 11px;
+}
+.ns-v {
+  font-family: 'Teko', sans-serif;
+  font-weight: 700;
+  font-size: 17px;
+  color: #fff;
+  line-height: 1;
+}
+.ns-l {
+  font-size: 9.5px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: .08em;
+  color: rgba(255,255,255,.3);
+  margin-top: 2px;
+}
+.ns-sub { font-size: 10.5px; color: rgba(255,255,255,.3); margin-top: 3px; }
+
+.unique-note {
+  font-size: 11px;
+  color: rgba(255,255,255,.3);
+  margin-top: 10px;
+  font-weight: 500;
+}
+
+/* ─── BOTTOM NAV ──────────────────────────── */
+.bottom-nav {
+  position: fixed;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100%;
+  max-width: 430px;
+  background: #161d28;
+  border-top: 1px solid rgba(255,255,255,.08);
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  padding-bottom: env(safe-area-inset-bottom, 0);
+  z-index: 50;
+}
+.nav-tab {
+  flex: 1;
+  min-width: 0;
+  background: transparent;
+  border: none;
+  padding: 11px 6px 13px;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  border-bottom: 2px solid transparent;
+  transition: border-color .15s;
+  overflow: hidden;
+}
+.nav-tab.active { border-bottom-color: #0066ff; }
+.nav-icon {
+  width: 22px;
+  height: 22px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.nav-icon svg { fill: rgba(255,255,255,.35); color: rgba(255,255,255,.35); width: 18px; height: 18px; transition: fill .15s, color .15s; }
+.nav-icon svg circle, .nav-icon svg rect, .nav-icon svg path:not([fill="none"]) { fill: currentColor; }
+.nav-tab.active .nav-icon svg { fill: #0066ff; color: #0066ff; }
+.nav-label {
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: .04em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,.3);
+  transition: color .15s;
+}
+.nav-tab.active .nav-label { color: #0066ff; }
+
+/* ─── MODALS ──────────────────────────────── */
+.overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,.72);
+  display: none;
+  align-items: flex-end;
+  justify-content: center;
+  z-index: 200;
+  padding-bottom: env(safe-area-inset-bottom, 0);
+}
+.overlay.show { display: flex; }
+.sheet {
+  background: #161d28;
+  border-radius: 18px 18px 0 0;
+  width: 100%;
+  max-width: 430px;
+  max-height: 88vh;
+  overflow-y: auto;
+  padding: 20px 20px 30px;
+  position: relative;
+}
+.sheet-handle {
+  width: 36px;
+  height: 4px;
+  background: rgba(255,255,255,.15);
+  border-radius: 2px;
+  margin: 0 auto 18px;
+}
+.sheet h2 {
+  font-family: 'Teko', sans-serif;
+  font-weight: 700;
+  font-size: 22px;
+  text-transform: uppercase;
+  letter-spacing: .04em;
+  color: #fff;
+  margin-bottom: 16px;
+  text-align: center;
+}
+
+.stat-row {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 8px;
+  margin-bottom: 18px;
+}
+.sc { background: #1d2638; border-radius: 9px; padding: 10px 8px; text-align: center; }
+.sc .n { font-family: 'Teko', sans-serif; font-size: 22px; font-weight: 700; color: #fff; }
+.sc .l { font-size: 9.5px; font-weight: 600; text-transform: uppercase; letter-spacing: .06em; color: rgba(255,255,255,.3); margin-top: 2px; }
+
+.form-dots { display: flex; gap: 5px; flex-wrap: wrap; margin-bottom: 16px; }
+.fd { width: 16px; height: 16px; border-radius: 4px; }
+.fd.W { background: #00b86b; }
+.fd.L { background: #e8324a; }
+.section-label {
+  font-size: 9.5px;
+  font-weight: 700;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,.3);
+  margin-bottom: 8px;
+}
+
+/* help steps */
+.help-list { display: flex; flex-direction: column; gap: 13px; margin-bottom: 16px; }
+.help-row { display: flex; gap: 12px; }
+.help-num {
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  background: rgba(0,102,255,.2);
+  color: #5599ff;
+  font-size: 13px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+.help-txt { font-size: 13.5px; line-height: 1.55; color: rgba(255,255,255,.6); }
+.help-txt strong { color: #fff; }
+
+/* rules content */
+.rules-section-head {
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: #0066ff;
+  margin: 16px 0 5px;
+}
+.rules-section-head:first-child { margin-top: 0; }
+.rules-text { font-size: 12.5px; color: rgba(255,255,255,.5); line-height: 1.65; }
+.rules-banner-txt {
+  background: rgba(0,102,255,.12);
+  border: 1px solid rgba(0,102,255,.25);
+  border-radius: 7px;
+  padding: 10px 14px;
+  margin-bottom: 16px;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: .04em;
+  text-transform: uppercase;
+  color: #5599ff;
+  text-align: center;
+}
+
+/* toast */
+.toast-dock { position: fixed; top: 70px; left: 50%; transform: translateX(-50%); z-index: 300; pointer-events: none; }
+.toast-msg {
+  background: #1d2638;
+  border: 1px solid rgba(255,255,255,.12);
+  color: #fff;
+  font-size: 13px;
+  font-weight: 600;
+  padding: 9px 18px;
+  border-radius: 8px;
+  white-space: nowrap;
+  opacity: 0;
+  transform: translateY(-6px);
+  transition: opacity .2s, transform .2s;
+}
+.toast-msg.show { opacity: 1; transform: translateY(0); }
+
+.empty-msg {
+  text-align: center;
+  padding: 60px 20px;
+  color: rgba(255,255,255,.25);
+  font-size: 13px;
+  font-weight: 500;
+}
+
+/* ─── HISTORY ANSWER DISPLAY ────────────────────────────── */
+.hi-answer-block {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: rgba(0, 184, 107, 0.09);
+  border: 1px solid rgba(0, 184, 107, 0.22);
+  border-radius: 9px;
+  padding: 10px 14px;
+  margin-bottom: 11px;
+}
+.hi-answer-label {
+  font-family: 'Figtree', sans-serif;
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  color: rgba(0, 184, 107, 0.7);
+  flex-shrink: 0;
+}
+.hi-answer-big {
+  font-family: 'Teko', sans-serif;
+  font-weight: 700;
+  font-size: 26px;
+  color: #00b86b;
+  line-height: 1;
+  letter-spacing: .01em;
+}
+
+/* ─── RECORD PANE ───────────────────────────────────────────── */
+.record-stat-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 8px;
+  margin-bottom: 4px;
+}
+.rsb {
+  background: #161d28;
+  border: 1px solid rgba(255,255,255,.06);
+  border-radius: 10px;
+  padding: 13px 8px;
+  text-align: center;
+}
+.rsn {
+  font-family: 'Teko', sans-serif;
+  font-weight: 700;
+  font-size: 26px;
+  color: #fff;
+  line-height: 1;
+}
+.rsl {
+  font-size: 9.5px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: .07em;
+  color: rgba(255,255,255,.3);
+  margin-top: 3px;
+}
+.record-next {
+  margin-top: 18px;
+  text-align: center;
+  font-size: 12px;
+  color: rgba(255,255,255,.3);
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+}
+.record-next strong {
+  color: rgba(255,255,255,.6);
+  font-family: 'Teko', sans-serif;
+  font-size: 18px;
+  font-weight: 700;
+  letter-spacing: .04em;
+}
+
+/* header logo-wrap for Day # eyebrow */
+.logo-wrap { display: flex; flex-direction: column; line-height: 1; }
+.logo-eye { font-size: 9px; font-weight: 600; letter-spacing: .14em; color: rgba(255,255,255,.3); text-transform: uppercase; font-family: 'Figtree', sans-serif; margin-bottom: 1px; }
+
+/* ─── PLAYER LEADERBOARD ─────────────────────────── */
+.sort-pills{display:flex;gap:6px;margin-bottom:14px;flex-wrap:wrap;}
+.sort-pill{
+  background:var(--surface-2,#1e2330);
+  border:1px solid rgba(255,255,255,.1);
+  color:rgba(255,255,255,.5);
+  border-radius:20px;
+  padding:7px 14px;
+  font-size:12px;font-weight:600;
+  cursor:pointer;
+  font-family:'Figtree',sans-serif;
+  transition:all .15s;
+}
+.sort-pill.active{background:#0066ff;border-color:#0066ff;color:#fff;}
+.sort-pill:hover:not(.active){color:rgba(255,255,255,.8);}
+
+.player-row{
+  display:flex;align-items:center;gap:12px;
+  background:#161d28;
+  border:1px solid rgba(255,255,255,.06);
+  border-radius:10px;padding:12px 14px;
+  margin-bottom:7px;
+}
+.player-row.top-three{border-color:rgba(0,102,255,.2);background:#18213a;}
+.player-rank{
+  font-family:'Teko',sans-serif;font-weight:700;font-size:17px;
+  color:rgba(255,255,255,.3);
+  min-width:28px;text-align:center;
+}
+.player-rank.rank-gold{color:#ffa800;font-size:20px;}
+.player-rank.rank-silver{color:#9ca3af;font-size:19px;}
+.player-rank.rank-bronze{color:#b45309;font-size:18px;}
+.player-info{flex:1;min-width:0;}
+.player-name{
+  font-size:14px;font-weight:700;color:#fff;
+  margin-bottom:5px;
+  display:flex;align-items:center;gap:7px;
+}
+.pstreak{
+  font-size:11px;color:#ffa800;font-weight:700;
+  background:rgba(255,168,0,.12);border-radius:4px;
+  padding:2px 6px;
+}
+.player-stats-row{display:flex;gap:12px;flex-wrap:wrap;}
+.pstat{display:flex;flex-direction:column;align-items:center;}
+.pstat-n{font-family:'Teko',sans-serif;font-weight:700;font-size:16px;color:rgba(255,255,255,.7);line-height:1;}
+.pstat-l{font-size:9px;font-weight:600;text-transform:uppercase;letter-spacing:.08em;color:rgba(255,255,255,.3);margin-top:1px;}
+.pstat-hi .pstat-n{color:#5599ff;}
+.pstat-hi .pstat-l{color:#5599ff;}
+.player-badge{font-size:20px;flex-shrink:0;}
+.player-footer{text-align:center;font-size:11px;color:rgba(255,255,255,.2);padding:14px 0 4px;font-weight:500;}
+
+@media (prefers-reduced-motion: reduce) {
+  .prize-dot-anim, .pct-fill, .a-bar-fill { animation: none !important; transition: none !important; }
+}
+</style>
+</head>
+<body>
+<div class="shell">
+
+  <header class="top-bar">
+    <div class="logo">UN<span style="color:#0066ff">LISTED</span></div>
+    <div class="right">
+      <button class="hdr-btn" id="helpBtn">?</button>
+    </div>
+  </header>
+
+  <div class="body-scroll">
+    <!-- TODAY PANE -->
+    <div class="pane active" id="paneToday">
+      <div id="zone"></div>
+    </div>
+
+    <!-- HISTORY PANE -->
+    <div class="pane" id="paneHistory">
+      <div id="histZone"></div>
+    </div>
+    <div class="pane" id="panePlayer">
+      <div style="margin-bottom:14px;">
+        <h2 style="font-family:'Teko',sans-serif;font-weight:700;font-size:22px;text-transform:uppercase;letter-spacing:.04em;color:#fff;margin:0 0 2px;">Player Standings</h2>
+        <p style="font-size:12px;color:rgba(255,255,255,.3);margin:0;">Updated after each result posts</p>
+      </div>
+      <div class="sort-pills" id="sortPills">
+        <button class="sort-pill active" data-sort="wins">🏆 Most Wins</button>
+        <button class="sort-pill" data-sort="correct">🎯 Sharpest</button>
+        <button class="sort-pill" data-sort="entries">📅 Most Active</button>
+      </div>
+      <div id="playerList"></div>
+    </div>
+  
+    <!-- RECORD PANE -->
+    <div class="pane" id="paneRecord">
+      <div style="margin-bottom:16px;">
+        <h2 style="font-family:'Teko',sans-serif;font-weight:700;font-size:22px;text-transform:uppercase;letter-spacing:.04em;color:#fff;margin:0 0 2px;">Your Record</h2>
+        <p style="font-size:12px;color:rgba(255,255,255,.3);margin:0;">Stored on this device</p>
+      </div>
+      <div class="record-stat-grid" id="recordStats">
+        <div class="rsb"><div class="rsn" id="rP">0</div><div class="rsl">Played</div></div>
+        <div class="rsb"><div class="rsn" id="rW">0%</div><div class="rsl">Hit %</div></div>
+        <div class="rsb"><div class="rsn" id="rS">0</div><div class="rsl">Streak</div></div>
+        <div class="rsb"><div class="rsn" id="rM">0</div><div class="rsl">Best</div></div>
+      </div>
+      <div style="font-family:'Figtree',sans-serif;font-size:9px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:rgba(255,255,255,.3);margin:18px 0 8px;">Last 20 props</div>
+      <div class="form-dots" id="recordDots"></div>
+      <div class="record-next">
+        <span>Next prop in</span>
+        <strong id="recordCountdown">--:--:--</strong>
+      </div>
+    </div>
+</div>
+
+
+  <nav class="bottom-nav">
+    <button class="nav-tab active" id="navToday">
+      <div class="nav-icon">
+        <svg viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><circle cx="10" cy="10" r="9"/><circle cx="10" cy="10" r="5" fill="#0f1219" opacity=".6"/></svg>
+      </div>
+      <span class="nav-label">Today</span>
+    </button>
+    <button class="nav-tab" id="navHistory">
+      <div class="nav-icon">
+        <svg viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><rect x="2" y="4" width="16" height="2" rx="1"/><rect x="2" y="9" width="12" height="2" rx="1"/><rect x="2" y="14" width="8" height="2" rx="1"/></svg>
+      </div>
+      <span class="nav-label">History</span>
+    </button>
+    <button class="nav-tab" id="navPlayer">
+      <div class="nav-icon">
+        <svg viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><circle cx="10" cy="6" r="4" fill="currentColor"/><path d="M2 18c0-4 3.6-7 8-7s8 3 8 7" stroke-width="1.5" fill="none" stroke="currentColor"/></svg>
+      </div>
+      <span class="nav-label">Players</span>
+    </button>
+    <button class="nav-tab" id="navRecord">
+      <div class="nav-icon">
+        <svg viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M10 2l2.4 4.9 5.4.8-3.9 3.8.9 5.3L10 14.2l-4.8 2.6.9-5.3L2.2 7.7l5.4-.8z" fill="currentColor"/></svg>
+      </div>
+      <span class="nav-label">Record</span>
+    </button>
+  </nav>
+</div>
+
+<div class="toast-dock"><div class="toast-msg" id="toast"></div></div>
+
+<!-- STATS SHEET -->
+<div class="overlay" id="statsOv">
+  <div class="sheet">
+    <div class="sheet-handle"></div>
+    <h2>Your record</h2>
+    <div class="stat-row">
+      <div class="sc"><div class="n" id="sP">0</div><div class="l">Played</div></div>
+      <div class="sc"><div class="n" id="sW">0%</div><div class="l">Hit</div></div>
+      <div class="sc"><div class="n" id="sS">0</div><div class="l">Streak</div></div>
+      <div class="sc"><div class="n" id="sM">0</div><div class="l">Best</div></div>
+    </div>
+    <div class="section-label">Last 20 props</div>
+    <div class="form-dots" id="formDots"></div>
+    <div class="countdown-txt">Next prop in <strong id="countdown">--:--:--</strong></div>
+  </div>
+</div>
+
+<!-- HELP SHEET -->
+<div class="overlay" id="helpOv">
+  <div class="sheet">
+    <div class="sheet-handle"></div>
+    <button class="mx" id="helpX" onclick="document.getElementById('helpOv').classList.remove('show')" style="position:absolute;top:14px;right:14px;width:30px;height:30px;border-radius:7px;border:none;background:rgba(255,255,255,.1);color:#fff;cursor:pointer;">✕</button>
+    <h2>How it works</h2>
+    <div class="help-list">
+      <div class="help-row"><div class="help-num">1</div><div class="help-txt">Every day there's one prop on a real game. No sportsbook has this line.</div></div>
+      <div class="help-row"><div class="help-num">2</div><div class="help-txt">Type your exact answer — a number, a player name, whatever the prop calls for.</div></div>
+      <div class="help-row"><div class="help-num">3</div><div class="help-txt"><strong>First exact answer wins.</strong> If multiple people get it right, the earliest submission takes the prize.</div></div>
+      <div class="help-row"><div class="help-num">4</div><div class="help-txt">Result posts after the game. Full breakdown on the History tab.</div></div>
+    </div>
+    <p style="font-size:11.5px;color:rgba(255,255,255,.3);line-height:1.5;">No purchase necessary. One entry per day. <a onclick="openRules()" style="color:rgba(0,102,255,.7);cursor:pointer;">Official rules</a>.</p>
+  </div>
+</div>
+
+<!-- RULES SHEET -->
+<div class="overlay" id="rulesOv">
+  <div class="sheet">
+    <div class="sheet-handle"></div>
+    <button class="mx" id="rulesX" onclick="document.getElementById('rulesOv').classList.remove('show')" style="position:absolute;top:14px;right:14px;width:30px;height:30px;border-radius:7px;border:none;background:rgba(255,255,255,.1);color:#fff;cursor:pointer;">✕</button>
+    <h2>Official Rules</h2>
+    <div class="rules-banner-txt">No purchase necessary to enter or win</div>
+    <div class="rules-section-head">1. Sponsor</div>
+    <p class="rules-text">UNLISTED Daily Prop Game. Metro Detroit, Michigan. Contact: prizes@unlistedprop.com</p>
+    <div class="rules-section-head">2. Eligibility</div>
+    <p class="rules-text">Open to legal U.S. residents 18 or older. Void where prohibited. Sponsor employees ineligible.</p>
+    <div class="rules-section-head">3. Entry period</div>
+    <p class="rules-text">One prop per calendar day. Entry opens when the prop is posted and closes when the result is marked. One (1) entry per person per day. Duplicate emails are disqualified.</p>
+    <div class="rules-section-head">4. How to enter</div>
+    <p class="rules-text">Visit unlistedprop.com, submit your exact answer, and provide your name and email. No purchase required.</p>
+    <div class="rules-section-head">5. Winner selection</div>
+    <p class="rules-text">The entrant who submits the first chronologically correct, exact answer wins. Ties go to the earliest server timestamp. If no exact answer is submitted, no prize is awarded that day.</p>
+    <div class="rules-section-head">6. Prize</div>
+    <p class="rules-text">A $50 Amazon.com digital gift card delivered by email within 24 hours of result. Non-transferable. No cash equivalent.</p>
+    <div class="rules-section-head">7. Notification</div>
+    <p class="rules-text">Winner notified by email within 24 hours. Must respond within 72 hours or prize is forfeited.</p>
+    <div class="rules-section-head">8. Odds</div>
+    <p class="rules-text">Depend on total entries and number of exact correct answers. Historical rates on the History tab.</p>
+    <div class="rules-section-head">9. Privacy</div>
+    <p class="rules-text">Name and email used only to administer this promotion and notify winners. Not sold or shared.</p>
+    <div class="rules-section-head">10. Governing law</div>
+    <p class="rules-text">State of Michigan. Last updated June 2026.</p>
+  </div>
+</div>
+
+<script>
+(function(){
+"use strict";
+
+const SB_URL  = "YOUR_SUPABASE_URL";
+const SB_ANON = "YOUR_SUPABASE_ANON_KEY";
+const SITE_URL = "unlistedprop.com";
+const HASHTAG  = "#UnlistedProp";
+const DEMO = SB_URL === "YOUR_SUPABASE_URL";
+
+/* ── DEMO ──────────────────────────────── */
+const D_PUZZLE = {
+  date: todayStr(), day_number: 4,
+  sport: "MLB", game: "Yankees @ Red Sox", game_time: "7:05 PM ET",
+  question: "How many total strikeouts are thrown in this game?",
+  answer_type: "number", answer_hint: "whole number of strikeouts",
+  correct_answer: null,
+  hero_image: null,
+  prize: "Amazon gift card", prize_value: "$50"
+};
+const D_HIST = [
+  {date:"2026-06-23",day_number:3,sport:"NBA",game:"Celtics @ Lakers",question:"How many points scored in the 3rd quarter combined?",answer_type:"number",correct_answer:"61",total_entries:284,correct_entries:2,winner_name:"Marcus",prize:"Amazon gift card",prize_value:"$50",answer_stats:{top_answers:[{answer:"65",count:47,correct:false},{answer:"61",count:2,correct:true},{answer:"58",count:38,correct:false},{answer:"70",count:28,correct:false},{answer:"55",count:18,correct:false}],unique_answers:89,avg_answer:64.2,median_answer:63,closest_wrong:62,closest_wrong_diff:1,min_answer:38,max_answer:112,within_10pct:52}},
+  {date:"2026-06-22",day_number:2,sport:"NFL",game:"Chiefs @ Bills",question:"How many rushing yards does the starting QB rack up?",answer_type:"number",correct_answer:"23",total_entries:312,correct_entries:0,winner_name:null,prize:"Amazon gift card",prize_value:"$50",answer_stats:{top_answers:[{answer:"45",count:61,correct:false},{answer:"30",count:54,correct:false},{answer:"20",count:48,correct:false},{answer:"35",count:42,correct:false},{answer:"50",count:38,correct:false}],unique_answers:74,avg_answer:38.1,median_answer:35,closest_wrong:24,closest_wrong_diff:1,min_answer:0,max_answer:150,within_10pct:0}},
+  {date:"2026-06-21",day_number:1,sport:"MLB",game:"Dodgers @ Braves",question:"Which pitcher throws the first strikeout?",answer_type:"text",correct_answer:"Yoshinobu Yamamoto",total_entries:198,correct_entries:11,winner_name:"Tyler",prize:"Amazon gift card",prize_value:"$50",answer_stats:{top_answers:[{answer:"Yoshinobu Yamamoto",count:11,correct:true},{answer:"Spencer Strider",count:44,correct:false},{answer:"Charlie Morton",count:21,correct:false},{answer:"Max Fried",count:18,correct:false}],unique_answers:41}},
+];
+const D_PLAYERS = [
+  {display_name:"Marcus T.",wins:3,correct_total:11,entries_total:21,best_streak:3,current_streak:1},
+  {display_name:"Tyler J.",wins:2,correct_total:8,entries_total:14,best_streak:2,current_streak:0},
+  {display_name:"Jordan K.",wins:1,correct_total:15,entries_total:28,best_streak:4,current_streak:2},
+  {display_name:"Sam W.",wins:1,correct_total:6,entries_total:18,best_streak:2,current_streak:0},
+  {display_name:"Casey M.",wins:0,correct_total:9,entries_total:19,best_streak:3,current_streak:3},
+  {display_name:"Alex R.",wins:0,correct_total:7,entries_total:16,best_streak:2,current_streak:0},
+  {display_name:"Devon B.",wins:0,correct_total:5,entries_total:12,best_streak:2,current_streak:1},
+  {display_name:"Riley S.",wins:0,correct_total:4,entries_total:11,best_streak:2,current_streak:0},
+  {display_name:"Quinn L.",wins:0,correct_total:3,entries_total:9,best_streak:1,current_streak:0},
+  {display_name:"Avery N.",wins:0,correct_total:2,entries_total:7,best_streak:1,current_streak:0},
+];
+
+/* ── TEAM LOGOS (inline SVG, works everywhere) ─────────────────── */
+const LOGOS={
+  MLB:{
+    "yankees":"NYY:#003087","new york yankees":"NYY:#003087",
+    "red sox":"BOS:#BD3039","boston red sox":"BOS:#BD3039",
+    "dodgers":"LAD:#005A9C","los angeles dodgers":"LAD:#005A9C",
+    "cubs":"CHC:#0E3386","chicago cubs":"CHC:#0E3386",
+    "cardinals":"STL:#C41E3A","st. louis cardinals":"STL:#C41E3A",
+    "braves":"ATL:#CE1141","atlanta braves":"ATL:#CE1141",
+    "astros":"HOU:#002D62","houston astros":"HOU:#002D62",
+    "phillies":"PHI:#E81828","philadelphia phillies":"PHI:#E81828",
+    "mariners":"SEA:#0C2C56","seattle mariners":"SEA:#0C2C56",
+    "padres":"SD:#2F241D","san diego padres":"SD:#2F241D",
+    "giants":"SF:#FD5A1E","san francisco giants":"SF:#FD5A1E",
+    "mets":"NYM:#002D72","new york mets":"NYM:#002D72",
+    "brewers":"MIL:#12284B","milwaukee brewers":"MIL:#12284B",
+    "nationals":"WSH:#AB0003","washington nationals":"WSH:#AB0003",
+    "marlins":"MIA:#00A3E0","miami marlins":"MIA:#00A3E0",
+    "pirates":"PIT:#FDB827","pittsburgh pirates":"PIT:#FDB827",
+    "reds":"CIN:#C6011F","cincinnati reds":"CIN:#C6011F",
+    "rockies":"COL:#333366","colorado rockies":"COL:#333366",
+    "diamondbacks":"ARI:#A71930","d-backs":"ARI:#A71930",
+    "guardians":"CLE:#00385D","cleveland guardians":"CLE:#00385D",
+    "royals":"KC:#004687","kansas city royals":"KC:#004687",
+    "tigers":"DET:#0C2340","detroit tigers":"DET:#0C2340",
+    "twins":"MIN:#002B5C","minnesota twins":"MIN:#002B5C",
+    "white sox":"CHW:#27251F","chicago white sox":"CHW:#27251F",
+    "orioles":"BAL:#DF4601","baltimore orioles":"BAL:#DF4601",
+    "blue jays":"TOR:#134A8E","toronto blue jays":"TOR:#134A8E",
+    "rays":"TB:#092C5C","tampa bay rays":"TB:#092C5C",
+    "rangers":"TEX:#003278","texas rangers":"TEX:#003278",
+    "angels":"LAA:#BA0021","los angeles angels":"LAA:#BA0021",
+    "athletics":"OAK:#003831","a's":"OAK:#003831"
+  },
+  NBA:{
+    "lakers":"LAL:#552583","los angeles lakers":"LAL:#552583",
+    "celtics":"BOS:#007A33","boston celtics":"BOS:#007A33",
+    "warriors":"GSW:#1D428A","golden state warriors":"GSW:#1D428A","gsw":"GSW:#1D428A",
+    "nuggets":"DEN:#0E2240","denver nuggets":"DEN:#0E2240",
+    "heat":"MIA:#98002E","miami heat":"MIA:#98002E",
+    "nets":"BKN:#000000","brooklyn nets":"BKN:#000000",
+    "knicks":"NY:#006BB6","new york knicks":"NY:#006BB6",
+    "bulls":"CHI:#CE1141","chicago bulls":"CHI:#CE1141",
+    "76ers":"PHI:#006BB6","sixers":"PHI:#006BB6","philadelphia 76ers":"PHI:#006BB6",
+    "bucks":"MIL:#00471B","milwaukee bucks":"MIL:#00471B",
+    "raptors":"TOR:#CE1141","toronto raptors":"TOR:#CE1141",
+    "pistons":"DET:#C8102E","detroit pistons":"DET:#C8102E",
+    "cavaliers":"CLE:#860038","cavs":"CLE:#860038","cleveland cavaliers":"CLE:#860038",
+    "pacers":"IND:#002D62","indiana pacers":"IND:#002D62",
+    "hawks":"ATL:#E03A3E","atlanta hawks":"ATL:#E03A3E",
+    "hornets":"CHA:#1D1160","charlotte hornets":"CHA:#1D1160",
+    "wizards":"WSH:#002B5C","washington wizards":"WSH:#002B5C",
+    "magic":"ORL:#0077C0","orlando magic":"ORL:#0077C0",
+    "spurs":"SA:#000000","san antonio spurs":"SA:#000000",
+    "suns":"PHX:#E56020","phoenix suns":"PHX:#E56020",
+    "clippers":"LAC:#C8102E","la clippers":"LAC:#C8102E",
+    "thunder":"OKC:#007AC1","oklahoma city thunder":"OKC:#007AC1",
+    "trail blazers":"POR:#E03A3E","blazers":"POR:#E03A3E",
+    "jazz":"UTA:#002B5C","utah jazz":"UTA:#002B5C",
+    "kings":"SAC:#5A2D81","sacramento kings":"SAC:#5A2D81",
+    "pelicans":"NO:#0C2340","new orleans pelicans":"NO:#0C2340",
+    "grizzlies":"MEM:#5D76A9","memphis grizzlies":"MEM:#5D76A9",
+    "mavericks":"DAL:#00538C","mavs":"DAL:#00538C","dallas mavericks":"DAL:#00538C",
+    "rockets":"HOU:#CE1141","houston rockets":"HOU:#CE1141",
+    "timberwolves":"MIN:#0C2340","wolves":"MIN:#0C2340"
+  },
+  NFL:{
+    "chiefs":"KC:#E31837","kansas city chiefs":"KC:#E31837",
+    "bills":"BUF:#00338D","buffalo bills":"BUF:#00338D",
+    "patriots":"NE:#002244","new england patriots":"NE:#002244",
+    "dolphins":"MIA:#008E97","miami dolphins":"MIA:#008E97",
+    "jets":"NYJ:#125740","new york jets":"NYJ:#125740",
+    "ravens":"BAL:#241773","baltimore ravens":"BAL:#241773",
+    "steelers":"PIT:#FFB612","pittsburgh steelers":"PIT:#FFB612",
+    "browns":"CLE:#FF3C00","cleveland browns":"CLE:#FF3C00",
+    "bengals":"CIN:#FB4F14","cincinnati bengals":"CIN:#FB4F14",
+    "texans":"HOU:#03202F","houston texans":"HOU:#03202F",
+    "colts":"IND:#002C5F","indianapolis colts":"IND:#002C5F",
+    "jaguars":"JAX:#006778","jacksonville jaguars":"JAX:#006778",
+    "titans":"TEN:#0C2340","tennessee titans":"TEN:#0C2340",
+    "broncos":"DEN:#FB4F14","denver broncos":"DEN:#FB4F14",
+    "raiders":"LV:#A5ACAF","las vegas raiders":"LV:#A5ACAF",
+    "chargers":"LAC:#0080C6","los angeles chargers":"LAC:#0080C6",
+    "cardinals":"ARI:#97233F","arizona cardinals":"ARI:#97233F",
+    "packers":"GB:#203731","green bay packers":"GB:#203731",
+    "vikings":"MIN:#4F2683","minnesota vikings":"MIN:#4F2683",
+    "bears":"CHI:#0B162A","chicago bears":"CHI:#0B162A",
+    "lions":"DET:#0076B6","detroit lions":"DET:#0076B6",
+    "eagles":"PHI:#004C54","philadelphia eagles":"PHI:#004C54",
+    "giants":"NYG:#0B2265","new york giants":"NYG:#0B2265",
+    "cowboys":"DAL:#003594","dallas cowboys":"DAL:#003594",
+    "commanders":"WSH:#5A1414","washington commanders":"WSH:#5A1414",
+    "panthers":"CAR:#0085CA","carolina panthers":"CAR:#0085CA",
+    "saints":"NO:#D3BC8D","new orleans saints":"NO:#D3BC8D",
+    "falcons":"ATL:#A71930","atlanta falcons":"ATL:#A71930",
+    "buccaneers":"TB:#D50A0A","bucs":"TB:#D50A0A","tampa bay buccaneers":"TB:#D50A0A",
+    "rams":"LAR:#003594","los angeles rams":"LAR:#003594",
+    "49ers":"SF:#AA0000","san francisco 49ers":"SF:#AA0000",
+    "seahawks":"SEA:#002244","seattle seahawks":"SEA:#002244"
+  },
+  NHL:{
+    "penguins":"PIT:#000000","pittsburgh penguins":"PIT:#000000",
+    "rangers":"NYR:#0038A8","new york rangers":"NYR:#0038A8",
+    "bruins":"BOS:#FFB81C","boston bruins":"BOS:#FFB81C",
+    "maple leafs":"TOR:#00205B","toronto maple leafs":"TOR:#00205B",
+    "canadiens":"MTL:#AF1E2D","montreal canadiens":"MTL:#AF1E2D",
+    "blackhawks":"CHI:#CF0A2C","chicago blackhawks":"CHI:#CF0A2C",
+    "red wings":"DET:#CE1126","detroit red wings":"DET:#CE1126",
+    "kings":"LA:#111111","los angeles kings":"LA:#111111",
+    "ducks":"ANA:#F47A38","anaheim ducks":"ANA:#F47A38",
+    "sharks":"SJ:#006D75","san jose sharks":"SJ:#006D75",
+    "canucks":"VAN:#00843D","vancouver canucks":"VAN:#00843D",
+    "flames":"CGY:#C8102E","calgary flames":"CGY:#C8102E",
+    "oilers":"EDM:#FF4C00","edmonton oilers":"EDM:#FF4C00",
+    "wild":"MIN:#154734","minnesota wild":"MIN:#154734",
+    "blues":"STL:#002F87","st. louis blues":"STL:#002F87",
+    "predators":"NSH:#FFB81C","nashville predators":"NSH:#FFB81C",
+    "lightning":"TB:#002868","tampa bay lightning":"TB:#002868",
+    "florida panthers":"FLA:#C8102E","fla":"FLA:#C8102E",
+    "capitals":"WSH:#041E42","washington capitals":"WSH:#041E42",
+    "islanders":"NYI:#003087","new york islanders":"NYI:#003087",
+    "devils":"NJD:#CE1126","new jersey devils":"NJD:#CE1126",
+    "flyers":"PHI:#F74902","philadelphia flyers":"PHI:#F74902",
+    "sabres":"BUF:#003087","buffalo sabres":"BUF:#003087",
+    "senators":"OTT:#C2912C","ottawa senators":"OTT:#C2912C",
+    "jets":"WPG:#041E42","winnipeg jets":"WPG:#041E42",
+    "avalanche":"COL:#6F263D","colorado avalanche":"COL:#6F263D",
+    "stars":"DAL:#006847","dallas stars":"DAL:#006847",
+    "hurricanes":"CAR:#CC0000","carolina hurricanes":"CAR:#CC0000",
+    "blue jackets":"CBJ:#002654","columbus blue jackets":"CBJ:#002654",
+    "golden knights":"VGK:#B4975A","vegas golden knights":"VGK:#B4975A",
+    "kraken":"SEA:#001628","seattle kraken":"SEA:#001628"
+  }
+};
+
+/* SVG badge with real team color — guaranteed to render everywhere */
+function teamLogoSVG(abbrev, color){
+  const c=color||"#1d2638";
+  const fs=abbrev.length>2?11:15;
+  const y=abbrev.length>2?29:30;
+  const svg='<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48">'
+    +'<circle cx="24" cy="24" r="24" fill="'+c+'"/>'
+    +'<circle cx="24" cy="24" r="21" fill="none" stroke="rgba(255,255,255,0.18)" stroke-width="1.5"/>'
+    +'<text x="24" y="'+y+'" text-anchor="middle" fill="#fff" '
+    +'font-family="Arial Black,Helvetica,sans-serif" '
+    +'font-size="'+fs+'" font-weight="900">'+abbrev+'</text>'
+    +'</svg>';
+  return "data:image/svg+xml;charset=utf-8,"+encodeURIComponent(svg);
+}
+
+function teamLogo(name, sport){
+  if(!name||!sport) return null;
+  const db=LOGOS[sport.toUpperCase()];
+  if(!db) return null;
+  const k=name.toLowerCase().trim();
+  const val=db[k]||db[k.split(/\s+/).pop()];
+  if(!val) return null;
+  const parts=val.split(":");
+  return teamLogoSVG(parts[0], parts[1]);
+}
+
+function getTeamAbbrev(name, sport){
+  if(!name) return "?";
+  const db=sport?LOGOS[sport.toUpperCase()]:null;
+  if(!db) return name.split(/\s+/).pop().slice(0,3).toUpperCase();
+  const k=name.toLowerCase().trim();
+  const val=db[k]||db[k.split(/\s+/).pop()];
+  if(!val) return name.split(/\s+/).pop().slice(0,3).toUpperCase();
+  return val.split(":")[0];
+}
+
+
+/* ── UTILS ──────────────────────────────── */
+function todayStr(){const d=new Date();return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0");}
+function fmtTime(iso){try{return new Date(iso).toLocaleTimeString([],{hour:"numeric",minute:"2-digit"});}catch(e){return "";}}
+function fmtDate(dateStr){
+  if(!dateStr) return "";
+  try{
+    // parse as local date (avoid UTC shift)
+    const [y,m,d]=dateStr.split("-").map(Number);
+    return new Date(y,m-1,d).toLocaleDateString("en-US",{month:"short",day:"numeric",year:"numeric"});
+  }catch(e){return dateStr;}
+}
+function fmtN(n){const f=parseFloat(n);if(isNaN(f))return String(n);return f%1===0?f.toLocaleString():f.toLocaleString(undefined,{maximumFractionDigits:1});}
+function prz(p){return (p.prize_value?p.prize_value+" ":"")+p.prize;}
+const TODAY = todayStr();
+
+async function sbGet(t,q){const r=await fetch(SB_URL+"/rest/v1/"+t+"?"+q+"&limit=1",{headers:{"apikey":SB_ANON,"Authorization":"Bearer "+SB_ANON}});if(!r.ok)throw new Error(r.status);const d=await r.json();return d[0]||null;}
+async function sbList(t,q){const r=await fetch(SB_URL+"/rest/v1/"+t+"?"+q,{headers:{"apikey":SB_ANON,"Authorization":"Bearer "+SB_ANON}});if(!r.ok)throw new Error(r.status);return r.json();}
+async function sbIns(t,b){return fetch(SB_URL+"/rest/v1/"+t,{method:"POST",headers:{"apikey":SB_ANON,"Authorization":"Bearer "+SB_ANON,"Content-Type":"application/json","Prefer":"return=representation"},body:JSON.stringify(b)});}
+
+/* ── LOCAL STORAGE ──────────────────────── */
+const SK="ulstats_v1",EK="ulentry_"+TODAY;
+function ls(k){try{const r=localStorage.getItem(k);return r?JSON.parse(r):null;}catch(e){return null;}}
+function lsSet(k,v){try{localStorage.setItem(k,JSON.stringify(v));}catch(e){}}
+function loadStats(){return ls(SK)||{played:0,wins:0,losses:0,streak:0,maxStreak:0,lastWinDay:-1,form:[]};}
+function saveStats(s){lsSet(SK,s);}
+function loadEntry(){return ls(EK);}
+function saveEntry(e){lsSet(EK,e);}
+let stats=loadStats();
+
+function isExact(puzzle,answer){
+  const c=puzzle.correct_answer;if(!c||!answer)return null;
+  if(puzzle.answer_type==="number")return parseFloat(answer)===parseFloat(c);
+  return c.split(",").map(s=>s.trim().toLowerCase()).includes(answer.trim().toLowerCase());
+}
+
+/* ── DOM ──────────────────────────────────── */
+const zone=document.getElementById("zone");
+const prizeBanner=document.getElementById("prizeBanner");
+const prizeEl=document.getElementById("prizeEl");
+const toastEl=document.getElementById("toast");
+function rh(){}  // streak display removed
+function toast(msg,ms){toastEl.textContent=msg;toastEl.classList.add("show");clearTimeout(toastEl._t);toastEl._t=setTimeout(()=>toastEl.classList.remove("show"),ms||2200);}
+
+/* ── TEAM LOGO + HERO ────────────────────────── */
+function parseTeams(game){
+  const parts = game.split(/@|vs\.?/i).map(s=>s.trim());
+  return {away: parts[0]||"", home: parts[1]||""};
+}
+function teamBlock(logoUrl, name, sport){
+  const initials = name ? name.split(" ").pop().slice(0,3).toUpperCase() : "?";
+  const auto = !logoUrl ? teamLogo(name, sport) : null;
+  const src = logoUrl || auto || "";
+  return `<div class="team-block">
+    <div class="team-logo-wrap">
+      ${src ? `<img src="${src}" alt="${name}" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"><span class="team-init" style="display:none">${initials}</span>` : `<span class="team-init">${initials}</span>`}
+    </div>
+    <span class="team-abbr">${name||""}</span>
+  </div>`;
+}
+function gameHeroHTML(puzzle){
+  const {away, home} = parseTeams(puzzle.game||"");
+  const sport = puzzle.sport||"";
+  if(puzzle.hero_image){
+    return `<div class="player-hero">
+      <img src="${puzzle.hero_image}" alt="Player" onerror="this.parentElement.style.display='none'">
+    </div>`;
+  }
+  return `<div class="game-hero">
+    <div class="game-meta">
+      <span class="sport-badge">${sport}</span>
+      ${puzzle.game_time?`<span class="game-time-tag">${puzzle.game_time}</span>`:""}
+    </div>
+    <div class="matchup">
+      ${teamBlock(puzzle.logo_a||null, away, sport)}
+      <div class="vs-col"><span class="at-sign">@</span></div>
+      ${teamBlock(puzzle.logo_b||null, home, sport)}
+    </div>
+  </div>`;
+}
+
+/* ── RENDER PICK ──────────────────────────── */
+function renderPick(puzzle){
+  const isNum = puzzle.answer_type === "number";
+  const hint = puzzle.answer_hint || (isNum ? "enter a whole number" : "enter a name");
+  zone.innerHTML =
+    `<div class="prop-card">
+      ${gameHeroHTML(puzzle)}
+      <div class="prop-body">
+        <div class="prop-eyebrow">Day #${puzzle.day_number} · Unlisted Prop</div>
+        <p class="prop-question">${puzzle.question}</p>
+      </div>
+      <div class="answer-zone">
+        <label class="ans-label">Your Answer</label>
+        <div class="scoreboard" onclick="document.getElementById('ansInput').focus()">
+          <input id="ansInput" type="${isNum?"number":"text"}" inputmode="${isNum?"numeric":"text"}" placeholder="—" autocomplete="off" autocorrect="off" spellcheck="false">
+          <div class="hint">${hint}</div>
+        </div>
+      </div>
+      <div class="prize-strip" id="prizeStrip">
+        <div class="prize-dot-anim"></div>
+        <div class="prize-line">First exact answer wins <strong>${prz(puzzle)}</strong></div>
+      </div>
+      <div class="entry-form" id="eform">
+        <div class="field-row">
+          <div class="field"><label>First name</label><input type="text" id="fName" placeholder="Jordan" autocomplete="given-name"></div>
+          <div class="field"><label>Email</label><input type="email" id="fEmail" placeholder="you@example.com" autocomplete="email"></div>
+        </div>
+      </div>
+      <div class="submit-wrap">
+        <button class="submit-btn" id="lockBtn" disabled>Submit Pick</button>
+        <div class="fine-print">No purchase necessary. One entry per day. <a onclick="openRules()">Official rules</a>.</div>
+      </div>
+    </div>`;
+
+  const ansInput = document.getElementById("ansInput");
+  const eform = document.getElementById("eform");
+  const lockBtn = document.getElementById("lockBtn");
+  const fName = document.getElementById("fName");
+  const fEmail = document.getElementById("fEmail");
+  const ve = () => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(fEmail.value);
+  const validate = () => lockBtn.disabled = !(ansInput.value.trim() && fName.value.trim() && ve());
+
+  ansInput.addEventListener("input", () => {
+    if(ansInput.value.trim() && !eform.classList.contains("visible")) eform.classList.add("visible");
+    validate();
+  });
+  fName.addEventListener("input", validate);
+  fEmail.addEventListener("input", validate);
+  lockBtn.addEventListener("click", () => doSubmit(puzzle, ansInput.value.trim()));
+}
+
+/* ── SUBMIT ───────────────────────────────── */
+async function doSubmit(puzzle, answer){
+  const name = document.getElementById("fName").value.trim();
+  const email = document.getElementById("fEmail").value.trim().toLowerCase();
+  const btn = document.getElementById("lockBtn");
+  if(!answer||!name||!email) return;
+  btn.disabled = true; btn.textContent = "Locking in…";
+  if(DEMO){
+    stats.played++; saveStats(stats);
+    const entry = {answer, name, email, resolved: false, submittedAt: new Date().toISOString()};
+    saveEntry(entry); renderLocked(puzzle, entry); return;
+  }
+  try{
+    const r = await sbIns("entries", {date: TODAY, name, email, answer});
+    if(r.status===409){toast("That email already has a pick today.",3000);btn.disabled=false;btn.textContent="Submit Pick";return;}
+    if(!r.ok) throw new Error(r.status);
+    const data = await r.json();
+    const submittedAt = (data[0] && data[0].created_at) || new Date().toISOString();
+    stats.played++; saveStats(stats);
+    const entry = {answer, name, email, resolved: false, submittedAt};
+    saveEntry(entry);
+    if(puzzle.correct_answer) resolveEntry(puzzle, entry);
+    else renderLocked(puzzle, entry);
+  }catch(e){toast("Connection error — try again.",3000);btn.disabled=false;btn.textContent="Submit Pick";}
+}
+
+/* ── LOCKED ───────────────────────────────── */
+function renderLocked(puzzle, entry){
+  const isNum = puzzle.answer_type === "number";
+  const disp = isNum ? fmtN(entry.answer) : entry.answer;
+  const timeStr = entry.submittedAt ? fmtTime(entry.submittedAt) : "";
+  zone.innerHTML =
+    `<div class="result-card">
+      ${gameHeroHTML(puzzle)}
+      <div class="result-status-bar locked">
+        <span class="status-pill locked">Pick Locked</span>
+        <span class="status-sub">Waiting on the final score</span>
+      </div>
+      <div class="result-body">
+        <div class="result-headline">In the running.</div>
+        <p class="result-sub">Your pick is locked. Come back after the game to see if you nailed it. First exact answer wins.</p>
+        <div class="locked-recap">
+          <div class="recap-left">
+            <div class="label">Your answer</div>
+            <div class="val">${disp}</div>
+            ${timeStr?`<div class="sub">submitted ${timeStr}</div>`:""}
+          </div>
+          <div class="recap-right">
+            <div class="label">Answer</div>
+            <div class="val">TBD</div>
+          </div>
+        </div>
+        <button class="action-btn outline" id="shareBtn">Share your pick — challenge a friend</button>
+        <div class="countdown-txt">Result posts tonight · next prop in <strong id="countdown">--:--:--</strong></div>
+      </div>
+    </div>`;
+  document.getElementById("shareBtn").addEventListener("click", () => shareLock(puzzle, entry));
+  tick();
+}
+
+/* ── RESOLVE ──────────────────────────────── */
+function resolveEntry(puzzle, entry){
+  const won = isExact(puzzle, entry.answer);
+  const isNum = puzzle.answer_type === "number";
+  if(!entry.resolved){
+    if(won){stats.wins++;stats.streak=(stats.lastWinDay===puzzle.day_number-1)?stats.streak+1:1;stats.maxStreak=Math.max(stats.maxStreak,stats.streak);stats.lastWinDay=puzzle.day_number;stats.form.push("W");}
+    else{stats.losses++;stats.streak=0;stats.form.push("L");}
+    stats.form=stats.form.slice(-20);saveStats(stats);
+    entry.resolved=true;entry.won=won;saveEntry(entry);
+  }
+  rh();
+  const dg = isNum ? fmtN(entry.answer) : entry.answer;
+  const da = isNum ? fmtN(puzzle.correct_answer) : puzzle.correct_answer;
+  const ps = prz(puzzle);
+  const timeStr = entry.submittedAt ? fmtTime(entry.submittedAt) : "";
+
+  zone.innerHTML =
+    `<div class="result-card">
+      ${gameHeroHTML(puzzle)}
+      <div class="result-status-bar ${won?"win":"loss"}">
+        <span class="status-pill ${won?"win":"loss"}">${won?"✓ Exact Match":"✗ Missed"}</span>
+        <span class="status-sub">${won?"You're in the running for the prize":"Better luck tomorrow"}</span>
+      </div>
+      <div class="result-body">
+        <div class="result-headline">${won?"You got it.":"Not this time."}</div>
+        <p class="result-sub">${won?`Exact match. If you were first, the ${ps} is yours — winner notified by email within 24 hours.`:`The answer was ${da}. Come back tomorrow for a fresh prop.`}</p>
+        <div class="compare-row">
+          <div class="compare-cell">
+            <div class="cc-label">Your answer</div>
+            <div class="cc-val ${won?"correct":"wrong"}">${dg}</div>
+            ${timeStr?`<div class="cc-sub">at ${timeStr}</div>`:""}
+          </div>
+          <div class="compare-cell">
+            <div class="cc-label">Correct answer</div>
+            <div class="cc-val">${da}</div>
+          </div>
+        </div>
+        <button class="action-btn ${won?"win-cta":"outline"}" id="shareBtn">${won?"Share the win ↗":"Share result — challenge a friend ↗"}</button>
+        <div class="countdown-txt">Next prop in <strong id="countdown">--:--:--</strong></div>
+      </div>
+    </div>`;
+  document.getElementById("shareBtn").addEventListener("click", () => shareResult(puzzle, entry, won, dg, da));
+  tick();
+}
+
+/* ── SHARE ────────────────────────────────── */
+async function cp(t){try{await navigator.clipboard.writeText(t);toast("Copied.");}catch(e){toast("Couldn't copy — try manually.");}}
+function shareLock(puzzle,entry){
+  cp("UNLISTED #"+puzzle.day_number+" 🔒\n"+puzzle.sport+" — "+puzzle.game+"\n\n"+puzzle.question+"\n\nMy answer: "+(puzzle.answer_type==="number"?fmtN(entry.answer):entry.answer)+"\n\nFirst exact answer wins "+prz(puzzle)+". Think you know better?\n"+HASHTAG+" · "+SITE_URL);
+}
+function shareResult(puzzle,entry,won,dg,da){
+  cp("UNLISTED #"+puzzle.day_number+" "+(won?"✅":"❌")+"\n"+puzzle.sport+" — "+puzzle.game+"\n\n"+puzzle.question+"\n\nAnswer: "+da+"\nMy guess: "+dg+" → "+(won?"EXACT 🎯":"missed")+(won?"\n\nIn the running for "+prz(puzzle)+" 🎁":"")+"\n\n🔥 streak: "+stats.streak+"\n"+HASHTAG+" · "+SITE_URL);
+}
+
+/* ── LEADERBOARD / HISTORY ────────────────── */
+let histLoaded = false;
+
+async function loadHistory(){
+  if(histLoaded) return;
+  const hz = document.getElementById("histZone");
+  hz.innerHTML = '<div class="empty-msg">Loading…</div>';
+  try{
+    const rows = DEMO ? D_HIST : await sbList("puzzles","select=*&order=day_number.desc&limit=60");
+    const resolved = rows.filter(r => r.correct_answer);
+    renderHistory(resolved);
+    histLoaded = true;
+  }catch(e){hz.innerHTML='<div class="empty-msg">Couldn\'t load. Check connection.</div>';}
+}
+
+function renderHistory(rows){
+  const hz = document.getElementById("histZone");
+  const te = rows.reduce((s,r)=>s+(r.total_entries||0),0);
+  const tc = rows.reduce((s,r)=>s+(r.correct_entries||0),0);
+  const hr = te ? ((tc/te)*100).toFixed(1) : 0;
+  const pw = rows.filter(r=>r.winner_name&&r.winner_name!=="No winner").length;
+
+  const sumHTML = `<div class="lb-summary">
+    <div class="lb-sum-item"><div class="lb-sum-num">${rows.length}</div><div class="lb-sum-lbl">Props</div></div>
+    <div class="lb-sum-item"><div class="lb-sum-num">${te.toLocaleString()}</div><div class="lb-sum-lbl">Entries</div></div>
+    <div class="lb-sum-item"><div class="lb-sum-num">${hr}%</div><div class="lb-sum-lbl">Hit rate</div></div>
+    <div class="lb-sum-item"><div class="lb-sum-num">${pw}</div><div class="lb-sum-lbl">Won</div></div>
+  </div>`;
+
+  if(!rows.length){hz.innerHTML=sumHTML+'<div class="empty-msg">No results yet.</div>';return;}
+
+  const cards = rows.map((r,i) => {
+    const ent = r.total_entries||0, cor = r.correct_entries||0;
+    const pct = ent ? ((cor/ent)*100).toFixed(1) : 0;
+    const hasW = r.winner_name && r.winner_name !== "No winner";
+    const st = r.answer_stats || null;
+    const isNum = r.answer_type === "number";
+
+    const {away,home} = parseTeams(r.game||"");
+    const logoA = r.logo_a || teamLogo(away, r.sport);
+    const logoB = r.logo_b || teamLogo(home, r.sport);
+
+    const dateDisplay = r.date ? fmtDate(r.date) : "";
+    return `<div class="history-item">
+      <div class="hi-header">
+        <div style="display:flex;align-items:center;gap:8px;flex:1;min-width:0;">
+          <div style="display:flex;flex-direction:column;gap:1px;flex-shrink:0;">
+            <span class="hi-day">#${r.day_number}</span>
+            ${dateDisplay?`<span style="font-family:'Figtree',sans-serif;font-size:9px;font-weight:600;color:rgba(255,255,255,.3);letter-spacing:.04em;">${dateDisplay}</span>`:""}
+          </div>
+          <div style="display:flex;align-items:center;gap:5px;flex-shrink:0;">
+            ${logoA?`<img src="${logoA}" style="width:26px;height:26px;object-fit:contain;filter:drop-shadow(0 1px 4px rgba(0,0,0,.5))" onerror="this.style.display='none'">`:``}
+            <span style="font-size:9px;font-weight:600;color:rgba(255,255,255,.2)">@</span>
+            ${logoB?`<img src="${logoB}" style="width:26px;height:26px;object-fit:contain;filter:drop-shadow(0 1px 4px rgba(0,0,0,.5))" onerror="this.style.display='none'">`:``}
+          </div>
+          <span class="hi-sport-game" style="flex:1;font-size:12px;">${r.sport} · ${r.game}</span>
+        </div>
+      </div>
+      <div class="hi-body">
+        <p class="hi-q">${r.question}</p>
+        <div class="hi-answer-block">
+          <span class="hi-answer-label">CORRECT ANSWER</span>
+          <span class="hi-answer-big">${r.correct_answer}</span>
+        </div>
+        <div class="hi-stats">
+          <div class="hi-stat"><div class="n">${ent.toLocaleString()}</div><div class="l">entries</div></div>
+          <div class="hi-divider"></div>
+          <div class="hi-stat"><div class="n">${cor}</div><div class="l">exact</div></div>
+          <div class="hi-divider"></div>
+          <div class="pct-bar">
+            <div class="hi-stat" style="margin-bottom:3px"><div class="n">${pct}%</div><div class="l">hit rate</div></div>
+            <div class="pct-track"><div class="pct-fill" style="width:${Math.max(2,parseFloat(pct))}%"></div></div>
+          </div>
+        </div>
+        ${hasW?`<div class="hi-winner">🏆 ${r.winner_name} won ${(r.prize_value||"")+" "+r.prize}</div>`:`<div class="hi-no-winner">${cor===0?"Nobody got this one":"Winner notified"}</div>`}
+      </div>
+      ${st?`
+      <button class="expand-btn" id="expBtn${i}" onclick="toggleBd(${i})">
+        <span>Answer breakdown</span><span class="arr" id="arr${i}">▾</span>
+      </button>
+      <div class="breakdown-panel" id="bd${i}">
+        <div class="bp-inner">
+          ${buildBd(r,st,isNum)}
+        </div>
+      </div>`:""}
+    </div>`;
+  }).join("");
+
+  hz.innerHTML = sumHTML + cards;
+}
+
+window.toggleBd = function(i){
+  const bd = document.getElementById("bd"+i);
+  const arr = document.getElementById("arr"+i);
+  const btn = document.getElementById("expBtn"+i);
+  const open = bd.classList.contains("open");
+  bd.classList.toggle("open",!open);
+  btn.classList.toggle("open",!open);
+  if(arr) arr.style.transform = open ? "" : "rotate(180deg)";
+};
+
+function buildBd(r, st, isNum){
+  const top = st.top_answers||[];
+  const maxC = top.length ? Math.max(...top.map(a=>a.count)) : 1;
+
+  let insight = "";
+  if(isNum && st.avg_answer != null){
+    const diff = Math.abs(st.avg_answer - parseFloat(r.correct_answer));
+    insight = `<span class="bp-insight">crowd avg ${fmtN(st.avg_answer)} — ${diff<2?"nearly spot on":diff<8?"just off":"off by "+Math.round(diff)}</span>`;
+  }
+
+  const bars = top.map(a=>{
+    const w = Math.max(5, Math.round((a.count/maxC)*100));
+    const disp = a.answer.length > 16 ? a.answer.slice(0,15)+"…" : a.answer;
+    return `<div class="a-bar">
+      <span class="a-bar-ans" title="${a.answer}">${disp}</span>
+      <div class="a-bar-track"><div class="a-bar-fill${a.correct?" correct-bar":""}" style="width:${w}%"></div></div>
+      <span class="a-bar-count">${a.count}</span>
+      ${a.correct?`<span class="a-bar-tag">✓</span>`:""}
+    </div>`;
+  }).join("");
+
+  let numStats = "";
+  if(isNum){
+    const cw = st.closest_wrong != null ? fmtN(st.closest_wrong)+(st.closest_wrong_diff!=null?" ("+st.closest_wrong_diff+" off)":"") : "—";
+    const range = (st.min_answer!=null&&st.max_answer!=null) ? fmtN(st.min_answer)+"–"+fmtN(st.max_answer) : "—";
+    const w10 = st.within_10pct != null ? `<div class="ns-sub">${st.within_10pct} within 10%</div>` : "";
+    numStats = `<div class="num-stats-grid">
+      <div class="ns-box"><div class="ns-v">${st.avg_answer!=null?fmtN(st.avg_answer):"—"}</div><div class="ns-l">Avg guess</div></div>
+      <div class="ns-box"><div class="ns-v">${st.median_answer!=null?fmtN(st.median_answer):"—"}</div><div class="ns-l">Median</div></div>
+      <div class="ns-box"><div class="ns-v">${cw}</div><div class="ns-l">Closest miss</div></div>
+      <div class="ns-box"><div class="ns-v">${range}</div><div class="ns-l">Range</div>${w10}</div>
+    </div>`;
+  }
+
+  const uniq = st.unique_answers != null ? `<div class="unique-note">${st.unique_answers} unique answers submitted</div>` : "";
+
+  return `<div class="bp-label">Most popular guesses ${insight}</div>
+    ${bars}
+    ${numStats}
+    ${uniq}`;
+}
+
+
+/* ── PLAYER LEADERBOARD ─────────────────────────────────────────────── */
+let playersLoaded = false;
+let playersData = [];
+let playerSort = "wins";
+
+async function loadPlayers(force){
+  if(playersLoaded && !force) return;
+  const pz = document.getElementById("playerList");
+  if(!pz) return;
+  pz.innerHTML = '<div class="empty-msg" style="padding:30px 0">Loading…</div>';
+  try{
+    playersData = DEMO
+      ? D_PLAYERS
+      : await sbList("player_stats","select=*&order=wins.desc,correct_total.desc&limit=100");
+    playersLoaded = true;
+    renderPlayers();
+  }catch(e){
+    pz.innerHTML='<div class="empty-msg">Could not load. Check connection.</div>';
+  }
+}
+
+function renderPlayers(){
+  const pz = document.getElementById("playerList");
+  if(!pz||!playersData.length){
+    if(pz) pz.innerHTML='<div class="empty-msg">No player data yet.<br>Comes live once results start posting.</div>';
+    return;
+  }
+  let sorted = [...playersData];
+  if(playerSort === "wins"){
+    sorted.sort((a,b)=> b.wins-a.wins || b.correct_total-a.correct_total || b.entries_total-a.entries_total);
+  } else if(playerSort === "correct"){
+    sorted.sort((a,b)=>{
+      const ra = a.entries_total>=3 ? a.correct_total/a.entries_total : -1;
+      const rb = b.entries_total>=3 ? b.correct_total/b.entries_total : -1;
+      return rb-ra || b.correct_total-a.correct_total;
+    });
+  } else {
+    sorted.sort((a,b)=> b.entries_total-a.entries_total || b.correct_total-a.correct_total);
+  }
+
+  const rows = sorted.slice(0,50).map((p,i)=>{
+    const rank = i+1;
+    const pct = p.entries_total ? Math.round((p.correct_total/p.entries_total)*100) : 0;
+    const rankClass = rank===1?"rank-gold":rank===2?"rank-silver":rank===3?"rank-bronze":"";
+    const streakStr = p.current_streak > 1 ? `<span class="pstreak">🔥${p.current_streak}</span>` : "";
+    const activeCol = playerSort==="wins"?"wins":playerSort==="correct"?"pct":"entries_total";
+    return `<div class="player-row${rank<=3?" top-three":""}">
+      <div class="player-rank ${rankClass}">${rank<=3?"⬤":rank}</div>
+      <div class="player-info">
+        <div class="player-name">${p.display_name} ${streakStr}</div>
+        <div class="player-stats-row">
+          <span class="pstat${activeCol==="wins"?" pstat-hi":""}"><span class="pstat-n">${p.wins}</span><span class="pstat-l">Wins</span></span>
+          <span class="pstat${activeCol==="pct"?" pstat-hi":""}"><span class="pstat-n">${p.correct_total}</span><span class="pstat-l">Exact</span></span>
+          <span class="pstat${activeCol==="entries_total"?" pstat-hi":""}"><span class="pstat-n">${p.entries_total}</span><span class="pstat-l">Played</span></span>
+          <span class="pstat"><span class="pstat-n">${pct}%</span><span class="pstat-l">Hit%</span></span>
+        </div>
+      </div>
+      ${p.wins>0?'<div class="player-badge">🏆</div>':''}
+    </div>`;
+  }).join("");
+
+  pz.innerHTML = rows +
+    `<div class="player-footer">Top ${Math.min(50,sorted.length)} players · updated after each result</div>`;
+}
+
+/* ── BOTTOM NAV ───────────────────────────── */
+
+function switchPane(active){
+  ["navToday","navHistory","navPlayer","navRecord"].forEach(id=>{
+    const el=document.getElementById(id);
+    if(el) el.classList.toggle("active", id===active);
+  });
+  ["paneToday","paneHistory","panePlayer","paneRecord"].forEach(id=>{
+    const el=document.getElementById(id);
+    if(el) el.classList.toggle("active", id===active.replace("nav","pane"));
+  });
+}
+document.getElementById("navToday").addEventListener("click",()=>switchPane("navToday"));
+document.getElementById("navHistory").addEventListener("click",()=>{switchPane("navHistory");loadHistory();});
+document.getElementById("navPlayer").addEventListener("click",()=>{switchPane("navPlayer");loadPlayers();});
+document.getElementById("navRecord").addEventListener("click",()=>{switchPane("navRecord");renderRecord();});
+
+// Help / rules modals
+const helpOv=document.getElementById("helpOv");
+const rulesOv=document.getElementById("rulesOv");
+document.getElementById("helpBtn").addEventListener("click",()=>helpOv.classList.add("show"));
+document.getElementById("helpX").addEventListener("click",()=>helpOv.classList.remove("show"));
+helpOv.addEventListener("click",e=>{if(e.target===helpOv)helpOv.classList.remove("show");});
+document.getElementById("rulesX").addEventListener("click",()=>rulesOv.classList.remove("show"));
+rulesOv.addEventListener("click",e=>{if(e.target===rulesOv)rulesOv.classList.remove("show");});
+window.openRules=()=>{helpOv.classList.remove("show");rulesOv.classList.add("show");};
+if(!localStorage.getItem("ul_help_v4")){helpOv.classList.add("show");try{localStorage.setItem("ul_help_v4","1");}catch(e){}}
+
+// Sort pills for player leaderboard
+document.getElementById("sortPills")?.addEventListener("click",e=>{
+  const btn=e.target.closest(".sort-pill");
+  if(!btn) return;
+  document.querySelectorAll(".sort-pill").forEach(b=>b.classList.remove("active"));
+  btn.classList.add("active");
+  playerSort=btn.dataset.sort;
+  renderPlayers();
+});
+
+// Record pane
+function renderRecord(){
+  document.getElementById("rP").textContent=stats.played;
+  document.getElementById("rW").textContent=stats.played?Math.round((stats.wins/stats.played)*100)+"%":"0%";
+  document.getElementById("rS").textContent=stats.streak;
+  document.getElementById("rM").textContent=stats.maxStreak;
+  const d=document.getElementById("recordDots");
+  if(d){
+    d.innerHTML=stats.form.length?"":"<span style='font-size:12px;color:rgba(255,255,255,.3)'>No picks yet</span>";
+    stats.form.forEach(r=>{const el=document.createElement("div");el.className="fd "+r;d.appendChild(el);});
+  }
+}
+
+// Countdown
+function tick(){
+  const el=document.getElementById("countdown");if(!el)return;
+  const now=new Date(),next=new Date(now.getFullYear(),now.getMonth(),now.getDate()+1);
+  let d=Math.max(0,next-now);
+  const h=String(Math.floor(d/3600000)).padStart(2,"0");d%=3600000;
+  const m=String(Math.floor(d/60000)).padStart(2,"0");d%=60000;
+  const s=String(Math.floor(d/1000)).padStart(2,"0");
+  el.textContent=h+":"+m+":"+s;
+}
+function tickRecord(){
+  const el=document.getElementById("recordCountdown");if(!el)return;
+  const now=new Date(),next=new Date(now.getFullYear(),now.getMonth(),now.getDate()+1);
+  let d=Math.max(0,next-now);
+  const h=String(Math.floor(d/3600000)).padStart(2,"0");d%=3600000;
+  const m=String(Math.floor(d/60000)).padStart(2,"0");d%=60000;
+  const s=String(Math.floor(d/1000)).padStart(2,"0");
+  el.textContent=h+":"+m+":"+s;
+}
+setInterval(tick,1000);
+setInterval(tickRecord,1000);
+
+// Init
+rh();
+(async function(){
+  const existing=loadEntry();
+  const puzzle=DEMO?D_PUZZLE:await sbGet("puzzles","date=eq."+TODAY+"&select=*").catch(()=>null);
+  if(!puzzle){
+    zone.innerHTML='<div class="empty-msg">No prop posted yet.<br>Check back soon.</div>';
+    return;
+  }
+  // prize banner removed from UI
+  if(existing){
+    if(puzzle.correct_answer) resolveEntry(puzzle,existing);
+    else renderLocked(puzzle,existing);
+  } else {
+    renderPick(puzzle);
+  }
+})();
+
+})();
+</script>
+</body>
+</html>
