@@ -1242,7 +1242,9 @@ body {
 
 const SB_URL  = "https://wztacrqzcnvmckfmstvk.supabase.co";
 const SB_ANON = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Ind6dGFjcnF6Y252bWNrZm1zdHZrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODIzOTg4NjYsImV4cCI6MjA5Nzk3NDg2Nn0.OC02eoLWJ-oIbHI8MEXFYTb6qkYigZHri9d9KYJuh-M";
-const SITE_URL = "unlistedprop.com";
+const SITE_URL = "unlistedpropgame.com";
+const RESEND_API_KEY = "re_mg5QvKWV_2evmMhjG64R88VHFWqhin8Ft"; // get from resend.com
+const FROM_EMAIL = "picks@unlistedpropgame.com"; // must match verified domain in Resend
 const HASHTAG  = "#UnlistedProp";
 const DEMO = SB_URL === "YOUR_SUPABASE_URL";
 
@@ -1549,9 +1551,15 @@ function renderPick(puzzle){
         <div class="prize-line">First exact answer wins <strong>${prz(puzzle)}</strong></div>
       </div>
       <div class="entry-form" id="eform">
-        <div class="field-row">
-          <div class="field"><label>First name</label><input type="text" id="fName" placeholder="Jordan" autocomplete="given-name"></div>
-          <div class="field"><label>Email</label><input type="email" id="fEmail" placeholder="you@example.com" autocomplete="email"></div>
+        <div class="field" style="margin-bottom:10px;">
+          <label>Username <span id="unameStatus" style="font-weight:400;text-transform:none;letter-spacing:0;font-size:10px;"></span></label>
+          <input type="text" id="fName" placeholder="e.g. SportsBrain99" autocomplete="username" maxlength="20" style="text-transform:lowercase;">
+          <div style="font-size:10px;color:rgba(255,255,255,.25);margin-top:4px;">Shown on the leaderboard. Letters, numbers, underscores only.</div>
+        </div>
+        <div class="field" style="margin-bottom:10px;">
+          <label>Email</label>
+          <input type="email" id="fEmail" placeholder="you@example.com" autocomplete="email">
+          <div style="font-size:10px;color:rgba(255,255,255,.25);margin-top:4px;">Only used to notify you if you win. Never shown publicly.</div>
         </div>
       </div>
       <div class="submit-wrap">
@@ -1565,6 +1573,12 @@ function renderPick(puzzle){
   const lockBtn = document.getElementById("lockBtn");
   const fName = document.getElementById("fName");
   const fEmail = document.getElementById("fEmail");
+  // Pre-fill from saved device profile
+  const savedProfile = loadProfile();
+  if(savedProfile){
+    if(fName && savedProfile.username) fName.value = savedProfile.username;
+    if(fEmail && savedProfile.email) fEmail.value = savedProfile.email;
+  }
   const ve = () => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(fEmail.value);
   const validate = () => lockBtn.disabled = !(ansInput.value.trim() && fName.value.trim() && ve());
 
@@ -1572,31 +1586,157 @@ function renderPick(puzzle){
     if(ansInput.value.trim() && !eform.classList.contains("visible")) eform.classList.add("visible");
     validate();
   });
-  fName.addEventListener("input", validate);
+  fName.addEventListener("input", ()=>{
+    // sanitise as they type
+    const el=document.getElementById("fName");
+    const v=el.value.toLowerCase().replace(/[^a-z0-9_]/g,'');
+    if(el.value!==v) el.value=v;
+    const stat=document.getElementById("unameStatus");
+    if(stat) stat.textContent="";
+    validate();
+  });
+  fName.addEventListener("blur", async()=>{
+    const u=document.getElementById("fName").value.trim();
+    const em=document.getElementById("fEmail").value.trim().toLowerCase();
+    const stat=document.getElementById("unameStatus");
+    if(!stat||!u||u.length<3) return;
+    if(DEMO){stat.textContent="✓ available";stat.style.color="var(--green)";return;}
+    const hash=hashEmail(em||"anon");
+    const res=await checkUsername(u,hash);
+    if(res==='available'){stat.textContent="✓ available";stat.style.color="var(--green)";}
+    else if(res==='yours'){stat.textContent="✓ your username";stat.style.color="var(--green)";}
+    else if(res==='taken'){stat.textContent="✗ taken";stat.style.color="var(--red)";}
+  });
   fEmail.addEventListener("input", validate);
   lockBtn.addEventListener("click", () => doSubmit(puzzle, ansInput.value.trim()));
 }
 
 /* ── SUBMIT ───────────────────────────────── */
+
+
+/* ── DEVICE PROFILE (localStorage) ──────────────────────────────── */
+const PROFILE_KEY = "unlisted_profile_v1";
+function loadProfile(){
+  try{ const r=localStorage.getItem(PROFILE_KEY); return r?JSON.parse(r):null; }
+  catch(e){ return null; }
+}
+function saveProfile(p){
+  try{ localStorage.setItem(PROFILE_KEY,JSON.stringify(p)); }catch(e){}
+}
+
+/* ── WELCOME EMAIL ───────────────────────────────────────────────── */
+async function sendWelcomeEmail(email, username){
+  if(RESEND_API_KEY === "YOUR_RESEND_API_KEY") return; // not configured yet
+  try{
+    await fetch("https://api.resend.com/emails",{
+      method:"POST",
+      headers:{
+        "Authorization":"Bearer "+RESEND_API_KEY,
+        "Content-Type":"application/json"
+      },
+      body:JSON.stringify({
+        from: FROM_EMAIL,
+        to: email,
+        subject: "Welcome to UNLISTED — you're in 🎯",
+        html: `
+          <div style="font-family:Arial,sans-serif;max-width:480px;margin:0 auto;background:#0f1219;color:#fff;padding:32px;border-radius:12px;">
+            <h1 style="font-size:28px;margin:0 0 4px;letter-spacing:.04em;">UN<span style="color:#0066ff">LISTED</span></h1>
+            <p style="font-size:11px;color:rgba(255,255,255,.4);margin:0 0 24px;text-transform:uppercase;letter-spacing:.1em;">The prop no sportsbook carries</p>
+            <p style="font-size:16px;color:rgba(255,255,255,.85);line-height:1.6;">Hey <strong>${username}</strong> — your pick is locked in.</p>
+            <p style="font-size:14px;color:rgba(255,255,255,.6);line-height:1.6;">Every day there's one specific prop on a real game. No sportsbook has this line. First exact answer wins a <strong style="color:#ffa800;">$50 Amazon gift card</strong>.</p>
+            <p style="font-size:14px;color:rgba(255,255,255,.6);line-height:1.6;">Results post after the game. Come back tomorrow for the next one.</p>
+            <div style="margin:28px 0;padding:16px;background:#161d28;border-radius:8px;border-left:3px solid #0066ff;">
+              <p style="margin:0;font-size:13px;color:rgba(255,255,255,.5);">Your username</p>
+              <p style="margin:4px 0 0;font-size:20px;font-weight:700;color:#fff;">${username}</p>
+            </div>
+            <p style="font-size:12px;color:rgba(255,255,255,.3);line-height:1.6;">If you win, we'll email you at this address within 24 hours. No purchase necessary. One pick per day.</p>
+            <a href="https://${SITE_URL}" style="display:inline-block;margin-top:16px;background:#0066ff;color:#fff;padding:12px 24px;border-radius:8px;text-decoration:none;font-weight:700;font-size:14px;">Play tomorrow's prop →</a>
+          </div>
+        `
+      })
+    });
+    console.log("Welcome email sent to", email);
+  }catch(e){
+    console.warn("Welcome email failed:", e.message);
+  }
+}
+
+/* ── USERNAME SYSTEM ─────────────────────────────────────────────── */
+function hashEmail(email){
+  let h=0;
+  for(let i=0;i<email.length;i++) h=Math.imul(31,h)+email.charCodeAt(i)|0;
+  return (h>>>0).toString(36);
+}
+function validUsername(u){
+  return /^[a-z0-9_]{3,20}$/.test(u);
+}
+async function checkUsername(username, emailHash){
+  // Returns: 'available' | 'yours' | 'taken' | 'error'
+  try{
+    const r = await fetch(SB_URL+"/rest/v1/user_profiles?username=eq."+encodeURIComponent(username)+"&select=email_hash",{
+      headers:{"apikey":SB_ANON,"Authorization":"Bearer "+SB_ANON}
+    });
+    if(!r.ok) return 'error';
+    const data = await r.json();
+    if(!data.length) return 'available';
+    if(data[0].email_hash === emailHash) return 'yours';
+    return 'taken';
+  }catch(e){ return 'error'; }
+}
+async function claimUsername(username, emailHash){
+  try{
+    const r = await fetch(SB_URL+"/rest/v1/user_profiles",{
+      method:"POST",
+      headers:{"apikey":SB_ANON,"Authorization":"Bearer "+SB_ANON,"Content-Type":"application/json","Prefer":"return=minimal"},
+      body:JSON.stringify({email_hash:emailHash, username:username})
+    });
+    return r.ok || r.status===409; // 409 = already exists (race condition), still ok
+  }catch(e){ return false; }
+}
+
 async function doSubmit(puzzle, answer){
-  const name = document.getElementById("fName").value.trim();
+  const rawUsername = document.getElementById("fName").value.trim().toLowerCase().replace(/[^a-z0-9_]/g,'');
   const email = document.getElementById("fEmail").value.trim().toLowerCase();
   const btn = document.getElementById("lockBtn");
-  if(!answer||!name||!email) return;
-  btn.disabled = true; btn.textContent = "Locking in…";
+  if(!answer||!rawUsername||!email) return;
+  if(!validUsername(rawUsername)){
+    toast("Username must be 3-20 characters: letters, numbers, underscores only.",3500);
+    return;
+  }
+  btn.disabled = true; btn.textContent = "Checking username…";
   if(DEMO){
     stats.played++; saveStats(stats);
-    const entry = {answer, name, email, resolved: false, submittedAt: new Date().toISOString()};
+    const entry = {answer, name: rawUsername, email, resolved: false, submittedAt: new Date().toISOString()};
     saveEntry(entry); renderLocked(puzzle, entry); return;
   }
   try{
-    const r = await sbIns("entries", {date: TODAY, name, email, answer});
+    const emailHash = hashEmail(email);
+    btn.textContent = "Checking username…";
+    const uStatus = await checkUsername(rawUsername, emailHash);
+    if(uStatus === 'taken'){
+      toast("That username is taken — pick another.",3000);
+      btn.disabled=false; btn.textContent="Submit Pick"; return;
+    }
+    btn.textContent = "Locking in…";
+    // Claim username if not already theirs
+    if(uStatus === 'available'){
+      await claimUsername(rawUsername, emailHash);
+    }
+    const r = await sbIns("entries", {date: TODAY, name: rawUsername, email, answer});
     if(r.status===409){toast("That email already has a pick today.",3000);btn.disabled=false;btn.textContent="Submit Pick";return;}
     if(!r.ok) throw new Error(r.status);
     const submittedAt = new Date().toISOString();
     stats.played++; saveStats(stats);
-    const entry = {answer, name, email, resolved: false, submittedAt};
+    // Save profile to device so form pre-fills next time
+    const existingProfile = loadProfile();
+    const isNewPlayer = !existingProfile;
+    saveProfile({username: rawUsername, email});
+    const entry = {answer, name: rawUsername, email, resolved: false, submittedAt};
     saveEntry(entry);
+    // Send welcome email only on first ever pick
+    if(isNewPlayer){
+      sendWelcomeEmail(email, rawUsername);
+    }
     if(puzzle.correct_answer) resolveEntry(puzzle, entry);
     else renderLocked(puzzle, entry);
   }catch(e){
