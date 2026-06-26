@@ -1463,7 +1463,7 @@ const TODAY = todayStr();
 
 async function sbGet(t,q){const r=await fetch(SB_URL+"/rest/v1/"+t+"?"+q+"&limit=1",{headers:{"apikey":SB_ANON,"Authorization":"Bearer "+SB_ANON}});if(!r.ok)throw new Error(r.status);const d=await r.json();return d[0]||null;}
 async function sbList(t,q){const r=await fetch(SB_URL+"/rest/v1/"+t+"?"+q,{headers:{"apikey":SB_ANON,"Authorization":"Bearer "+SB_ANON}});if(!r.ok)throw new Error(r.status);return r.json();}
-async function sbIns(t,b){return fetch(SB_URL+"/rest/v1/"+t,{method:"POST",headers:{"apikey":SB_ANON,"Authorization":"Bearer "+SB_ANON,"Content-Type":"application/json","Prefer":"return=representation"},body:JSON.stringify(b)});}
+async function sbIns(t,b){return fetch(SB_URL+"/rest/v1/"+t,{method:"POST",headers:{"apikey":SB_ANON,"Authorization":"Bearer "+SB_ANON,"Content-Type":"application/json","Prefer":"return=minimal"},body:JSON.stringify(b)});}
 
 /* ── LOCAL STORAGE ──────────────────────── */
 const SK="ulstats_v1",EK="ulentry_"+TODAY;
@@ -1593,8 +1593,7 @@ async function doSubmit(puzzle, answer){
     const r = await sbIns("entries", {date: TODAY, name, email, answer});
     if(r.status===409){toast("That email already has a pick today.",3000);btn.disabled=false;btn.textContent="Submit Pick";return;}
     if(!r.ok) throw new Error(r.status);
-    const data = await r.json();
-    const submittedAt = (data[0] && data[0].created_at) || new Date().toISOString();
+    const submittedAt = new Date().toISOString();
     stats.played++; saveStats(stats);
     const entry = {answer, name, email, resolved: false, submittedAt};
     saveEntry(entry);
