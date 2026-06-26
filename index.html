@@ -1600,7 +1600,12 @@ async function doSubmit(puzzle, answer){
     saveEntry(entry);
     if(puzzle.correct_answer) resolveEntry(puzzle, entry);
     else renderLocked(puzzle, entry);
-  }catch(e){toast("Connection error — try again.",3000);btn.disabled=false;btn.textContent="Submit Pick";}
+  }catch(e){
+    console.error("Submit error:", e);
+    toast("Error: "+e.message,5000);
+    btn.disabled=false;
+    btn.textContent="Submit Pick";
+  }
 }
 
 /* ── LOCKED ───────────────────────────────── */
