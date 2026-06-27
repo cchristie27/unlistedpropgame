@@ -950,6 +950,18 @@ body {
   font-weight: 500;
 }
 
+/* lock countdown */
+.lock-countdown {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  margin: 0 18px 14px;
+  font-size: 12.5px;
+  font-weight: 600;
+  color: rgba(255,255,255,.4);
+}
+.lock-cd-icon { font-size: 13px; }
+
 /* ─── HISTORY ANSWER DISPLAY ────────────────────────────── */
 .hi-answer-block {
   display: flex;
@@ -1528,8 +1540,34 @@ function gameHeroHTML(puzzle){
   </div>`;
 }
 
+
+/* ── LOCK TIME ──────────────────────────────────────────────────── */
+function isLocked(puzzle){
+  if(!puzzle.lock_time) return false;
+  return new Date() >= new Date(puzzle.lock_time);
+}
+function msUntilLock(puzzle){
+  if(!puzzle.lock_time) return null;
+  return new Date(puzzle.lock_time) - new Date();
+}
+function fmtCountdown(ms){
+  if(ms<=0) return null;
+  const totalSec = Math.floor(ms/1000);
+  const h = Math.floor(totalSec/3600);
+  const m = Math.floor((totalSec%3600)/60);
+  const s = totalSec%60;
+  if(h>0) return h+"h "+m+"m";
+  if(m>0) return m+"m "+String(s).padStart(2,'0')+"s";
+  return s+"s";
+}
+
 /* ── RENDER PICK ──────────────────────────── */
 function renderPick(puzzle){
+  // If game already started, show locked state instead
+  if(isLocked(puzzle)){
+    renderGameLocked(puzzle);
+    return;
+  }
   const isNum = puzzle.answer_type === "number";
   const hint = puzzle.answer_hint || (isNum ? "enter a whole number" : "enter a name");
   zone.innerHTML =
@@ -1550,6 +1588,10 @@ function renderPick(puzzle){
         <div class="prize-dot-anim"></div>
         <div class="prize-line">First exact answer wins <strong>${prz(puzzle)}</strong></div>
       </div>
+      ${puzzle.lock_time ? `<div class="lock-countdown" id="lockCountdown">
+        <span class="lock-cd-icon">⏱</span>
+        <span class="lock-cd-txt" id="lockCdTxt">Locks when game starts</span>
+      </div>` : ''}
       <div class="entry-form" id="eform">
         <div class="field" style="margin-bottom:10px;">
           <label>Username <span id="unameStatus" style="font-weight:400;text-transform:none;letter-spacing:0;font-size:10px;"></span></label>
@@ -1609,6 +1651,27 @@ function renderPick(puzzle){
   });
   fEmail.addEventListener("input", validate);
   lockBtn.addEventListener("click", () => doSubmit(puzzle, ansInput.value.trim()));
+
+  // Countdown timer + auto-lock when game starts
+  if(puzzle.lock_time){
+    const cdInterval = setInterval(()=>{
+      const ms = msUntilLock(puzzle);
+      const cdTxt = document.getElementById("lockCdTxt");
+      if(ms===null || !cdTxt){ clearInterval(cdInterval); return; }
+      if(ms<=0){
+        clearInterval(cdInterval);
+        renderGameLocked(puzzle);
+        return;
+      }
+      const fmt = fmtCountdown(ms);
+      if(ms < 3600000){ // under 1 hour — show urgency
+        cdTxt.textContent = "Locks in "+fmt;
+        cdTxt.style.color = ms < 600000 ? "#e8324a" : "#ffa800";
+      } else {
+        cdTxt.textContent = "Locks in "+fmt;
+      }
+    }, 1000);
+  }
 }
 
 /* ── SUBMIT ───────────────────────────────── */
@@ -1745,6 +1808,25 @@ async function doSubmit(puzzle, answer){
     btn.disabled=false;
     btn.textContent="Submit Pick";
   }
+}
+
+
+/* ── GAME LOCKED STATE ───────────────────────────────────────────── */
+function renderGameLocked(puzzle){
+  zone.innerHTML =
+    `<div class="result-card">
+      ${gameHeroHTML(puzzle)}
+      <div class="result-status-bar locked" style="background:rgba(120,120,120,.1);">
+        <span class="status-pill" style="background:rgba(255,255,255,.1);color:rgba(255,255,255,.5);">🔒 Picks Closed</span>
+        <span class="status-sub">Game in progress</span>
+      </div>
+      <div class="result-body">
+        <div class="result-headline" style="color:rgba(255,255,255,.6);">Game has started.</div>
+        <p class="result-sub">Pick submissions are closed for this prop. The result will post after the game ends — check the History tab.</p>
+        <div class="countdown-txt" style="margin-top:16px;">Next prop drops tomorrow · <strong id="countdown">--:--:--</strong></div>
+      </div>
+    </div>`;
+  tick();
 }
 
 /* ── LOCKED ───────────────────────────────── */
@@ -2127,7 +2209,9 @@ rh();
     return;
   }
   // prize banner removed from UI
-  if(existing){
+  if(isLocked(puzzle) && !existing){
+    renderGameLocked(puzzle);
+  } else if(existing){
     if(puzzle.correct_answer) resolveEntry(puzzle,existing);
     else renderLocked(puzzle,existing);
   } else {
