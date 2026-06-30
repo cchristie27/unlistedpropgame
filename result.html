@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<title>UNLISTED — Enter Result</title>
+<link href="https://fonts.googleapis.com/css2?family=Teko:wght@600;700&family=Figtree:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
+html,body{min-height:100%;background:#0f1219;color:#fff;font-family:'Figtree',sans-serif;-webkit-font-smoothing:antialiased;}
+body{padding:20px 16px 60px;}
+
+.logo{font-family:'Teko',sans-serif;font-weight:700;font-size:22px;letter-spacing:.04em;margin-bottom:4px;}
+.logo span{color:#0066ff;}
+.subtitle{font-size:11px;color:rgba(255,255,255,.3);letter-spacing:.08em;text-transform:uppercase;margin-bottom:24px;}
+
+.card{background:#161d28;border:1px solid rgba(255,255,255,.07);border-radius:12px;padding:18px;margin-bottom:14px;}
+.card-title{font-size:10px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:rgba(255,255,255,.35);margin-bottom:12px;}
+
+label{display:block;font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.35);margin-bottom:6px;}
+input{width:100%;background:#1d2638;border:1px solid rgba(255,255,255,.1);border-radius:8px;padding:12px 14px;font-family:'Figtree',sans-serif;font-size:15px;color:#fff;outline:none;-webkit-appearance:none;}
+input:focus{border-color:rgba(0,102,255,.5);}
+input[type=password]{letter-spacing:.05em;}
+.field{margin-bottom:12px;}
+.field:last-child{margin-bottom:0;}
+
+.answer-input{width:100%;background:#060b14;border:1.5px solid rgba(0,102,255,.35);border-radius:8px;padding:14px;font-family:'Teko',sans-serif;font-size:52px;font-weight:700;color:#0066ff;text-align:center;outline:none;-moz-appearance:textfield;-webkit-appearance:none;}
+.answer-input:focus{border-color:rgba(0,102,255,.7);box-shadow:0 0 0 3px rgba(0,102,255,.12);}
+.answer-input::-webkit-inner-spin-button,.answer-input::-webkit-outer-spin-button{-webkit-appearance:none;}
+.answer-input::placeholder{color:rgba(0,102,255,.2);font-size:0.5em;font-weight:500;}
+
+.btn{width:100%;border:none;border-radius:10px;padding:16px;font-family:'Figtree',sans-serif;font-size:16px;font-weight:700;cursor:pointer;transition:background .15s;}
+.btn-primary{background:#0066ff;color:#fff;margin-bottom:10px;}
+.btn-primary:active{background:#0052cc;transform:scale(.98);}
+.btn-primary:disabled{background:#1d2638;color:rgba(255,255,255,.3);cursor:not-allowed;}
+.btn-ghost{background:#1d2638;color:rgba(255,255,255,.5);border:1px solid rgba(255,255,255,.08);}
+.btn-ghost:active{background:#253247;}
+
+.msg{font-size:12.5px;min-height:18px;margin-top:8px;line-height:1.5;font-family:'Figtree',sans-serif;}
+.ok{color:#00b86b;}
+.err{color:#e8324a;}
+.info{color:rgba(255,255,255,.4);}
+
+.question-preview{background:#1d2638;border-radius:8px;padding:12px 14px;margin-bottom:12px;}
+.qp-label{font-size:9px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.3);margin-bottom:5px;}
+.qp-text{font-family:'Teko',sans-serif;font-weight:700;font-size:17px;color:#fff;text-transform:uppercase;line-height:1.2;}
+.qp-date{font-size:11px;color:rgba(255,255,255,.3);margin-top:4px;}
+
+.winner-box{background:linear-gradient(135deg,rgba(255,168,0,.12),rgba(255,168,0,.05));border:1px solid rgba(255,168,0,.3);border-radius:10px;padding:18px;margin-top:14px;display:none;}
+.winner-box.show{display:block;}
+.wb-trophy{font-size:32px;text-align:center;margin-bottom:10px;}
+.wb-name{font-family:'Teko',sans-serif;font-weight:700;font-size:26px;text-align:center;color:#fff;letter-spacing:.04em;text-transform:uppercase;}
+.wb-email{font-size:13px;color:#ffa800;text-align:center;margin:4px 0 2px;font-weight:600;}
+.wb-answer{font-size:11px;color:rgba(255,255,255,.4);text-align:center;}
+.wb-stats{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:14px;}
+.ws{background:rgba(0,0,0,.25);border-radius:7px;padding:10px;text-align:center;}
+.ws-n{font-family:'Teko',sans-serif;font-size:22px;font-weight:700;color:#fff;}
+.ws-l{font-size:9px;font-weight:600;text-transform:uppercase;letter-spacing:.08em;color:rgba(255,255,255,.3);margin-top:2px;}
+.no-winner{text-align:center;padding:14px;color:rgba(255,255,255,.4);font-size:13px;}
+
+.saved-cred{display:flex;align-items:center;justify-content:space-between;background:#1d2638;border-radius:7px;padding:9px 12px;margin-bottom:10px;}
+.sc-txt{font-size:12px;color:rgba(255,255,255,.5);}
+.sc-btn{font-size:11px;font-weight:600;color:#e8324a;cursor:pointer;background:none;border:none;padding:4px 8px;}
+
+.step{display:none;}
+.step.active{display:block;}
+</style>
+</head>
+<body>
+
+<div class="logo">UN<span>LISTED</span></div>
+<div class="subtitle">Result Entry · Keep this private</div>
+
+<!-- STEP 1: Credentials -->
+<div class="step active" id="step1">
+  <div class="card">
+    <div class="card-title">Connect to Supabase</div>
+    <div id="savedCredsBox" style="display:none">
+      <div class="saved-cred">
+        <span class="sc-txt">✓ Credentials saved on this device</span>
+        <button class="sc-btn" onclick="clearCreds()">Clear</button>
+      </div>
+    </div>
+    <div id="credFields">
+      <div class="field">
+        <label>Project URL</label>
+        <input type="url" id="sbUrl" placeholder="https://xxxxx.supabase.co" autocomplete="off" autocorrect="off">
+      </div>
+      <div class="field">
+        <label>Service Role Key</label>
+        <input type="password" id="sbKey" placeholder="eyJ..." autocomplete="off">
+      </div>
+    </div>
+    <button class="btn btn-primary" id="connectBtn" onclick="connect()">Connect</button>
+    <div class="msg info" id="cMsg"></div>
+  </div>
+</div>
+
+<!-- STEP 2: Enter Result -->
+<div class="step" id="step2">
+  <div class="card">
+    <div class="card-title">Today's prop</div>
+    <div class="field">
+      <label>Date</label>
+      <input type="date" id="rDate">
+    </div>
+    <button class="btn btn-ghost" style="margin-bottom:8px;" onclick="loadPuzzle()">Load Prop ↓</button>
+    <div id="puzzlePreview"></div>
+    <div class="msg" id="loadMsg"></div>
+  </div>
+
+  <div class="card" id="answerCard" style="display:none">
+    <div class="card-title">Correct Answer</div>
+    <input class="answer-input" type="number" id="rAnswer" placeholder="—" inputmode="numeric">
+    <div style="font-size:11px;color:rgba(255,255,255,.25);text-align:center;margin-top:8px;">Enter the exact final answer</div>
+    <button class="btn btn-primary" style="margin-top:16px;" id="submitBtn" onclick="submitResult()">Save Answer &amp; Process Everything</button>
+    <div class="msg" id="rMsg"></div>
+    <div class="winner-box" id="winnerBox">
+      <div class="wb-trophy">🏆</div>
+      <div class="wb-name" id="wName"></div>
+      <div class="wb-email" id="wEmail"></div>
+      <div class="wb-answer" id="wAnswer"></div>
+      <div class="wb-stats">
+        <div class="ws"><div class="ws-n" id="wEntries">0</div><div class="ws-l">Entries</div></div>
+        <div class="ws"><div class="ws-n" id="wExact">0</div><div class="ws-l">Exact</div></div>
+      </div>
+    </div>
+    <div class="no-winner" id="noWinner" style="display:none">Nobody got it right — no winner today.</div>
+  </div>
+</div>
+
+<script>
+const CRED_KEY = 'unlisted_admin_creds';
+let URL = '', KEY = '', currentPuzzle = null;
+
+function todayStr(){
+  const d = new Date();
+  return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
+}
+
+// Pre-fill date
+document.getElementById('rDate').value = todayStr();
+
+// Load saved credentials
+function loadSavedCreds(){
+  try{
+    const saved = JSON.parse(localStorage.getItem(CRED_KEY)||'null');
+    if(saved && saved.url && saved.key){
+      URL = saved.url; KEY = saved.key;
+      document.getElementById('savedCredsBox').style.display = 'block';
+      document.getElementById('credFields').style.display = 'none';
+      return true;
+    }
+  }catch(e){}
+  return false;
+}
+
+function clearCreds(){
+  localStorage.removeItem(CRED_KEY);
+  URL = ''; KEY = '';
+  document.getElementById('savedCredsBox').style.display = 'none';
+  document.getElementById('credFields').style.display = 'block';
+}
+
+function msg(id, txt, type){
+  const el = document.getElementById(id);
+  el.textContent = txt;
+  el.className = 'msg ' + (type||'');
+}
+
+async function connect(){
+  const urlEl = document.getElementById('sbUrl');
+  const keyEl = document.getElementById('sbKey');
+  
+  if(URL && KEY){
+    // Already have creds from localStorage, just proceed
+    testAndProceed();
+    return;
+  }
+  
+  URL = urlEl.value.trim().replace(/\/+$/, '');
+  KEY = keyEl.value.trim();
+  if(!URL || !KEY){ msg('cMsg','Enter both fields.','err'); return; }
+  testAndProceed();
+}
+
+async function testAndProceed(){
+  msg('cMsg','Connecting…','info');
+  try{
+    const r = await fetch(URL+'/rest/v1/puzzles?select=id&limit=1', {
+      headers:{'apikey':KEY,'Authorization':'Bearer '+KEY}
+    });
+    if(r.ok){
+      // Save creds to localStorage
+      localStorage.setItem(CRED_KEY, JSON.stringify({url:URL, key:KEY}));
+      msg('cMsg','','');
+      document.getElementById('step1').classList.remove('active');
+      document.getElementById('step2').classList.add('active');
+      loadPuzzle();
+    } else {
+      msg('cMsg','Connection failed ('+r.status+'). Check your URL and service role key.','err');
+    }
+  }catch(e){
+    msg('cMsg','Could not reach Supabase. Check URL.','err');
+  }
+}
+
+async function loadPuzzle(){
+  const date = document.getElementById('rDate').value;
+  if(!date){ msg('loadMsg','Pick a date.','err'); return; }
+  msg('loadMsg','Loading…','info');
+  document.getElementById('answerCard').style.display = 'none';
+  try{
+    const r = await fetch(URL+'/rest/v1/puzzles?date=eq.'+date+'&select=*&limit=1',{
+      headers:{'apikey':KEY,'Authorization':'Bearer '+KEY}
+    });
+    const data = await r.json();
+    if(!data.length){ msg('loadMsg','No prop found for '+date+'. Check the date.','err'); return; }
+    currentPuzzle = data[0];
+    
+    const preview = document.getElementById('puzzlePreview');
+    preview.innerHTML = `
+      <div class="question-preview">
+        <div class="qp-label">Today's prop</div>
+        <div class="qp-text">${currentPuzzle.question}</div>
+        <div class="qp-date">${currentPuzzle.sport} · ${currentPuzzle.game} · ${date}</div>
+      </div>`;
+    
+    if(currentPuzzle.correct_answer){
+      msg('loadMsg','Result already entered: '+currentPuzzle.correct_answer+'. You can re-enter to update.','info');
+    } else {
+      msg('loadMsg','','');
+    }
+    
+    document.getElementById('answerCard').style.display = 'block';
+    document.getElementById('rAnswer').focus();
+  }catch(e){
+    msg('loadMsg','Error loading prop: '+e.message,'err');
+  }
+}
+
+function isExact(puzzle, answer){
+  if(!answer) return false;
+  if(puzzle.answer_type === 'number') return parseFloat(answer) === parseFloat(puzzle.correct_answer);
+  return puzzle.correct_answer.split(',').map(s=>s.trim().toLowerCase()).includes(answer.trim().toLowerCase());
+}
+
+function computeStats(entries, correctAnswer, answerType){
+  const pz = {...currentPuzzle, correct_answer: correctAnswer};
+  const counts = {};
+  entries.forEach(e => {
+    const k = e.answer.trim();
+    counts[k] = (counts[k]||0) + 1;
+  });
+  const top = Object.entries(counts).sort((a,b)=>b[1]-a[1]).slice(0,7)
+    .map(([answer,count])=>({answer, count, correct: isExact(pz, answer)}));
+  
+  let stats = {top_answers: top, unique_answers: Object.keys(counts).length};
+  
+  if(answerType === 'number'){
+    const nums = entries.map(e=>parseFloat(e.answer)).filter(n=>!isNaN(n));
+    if(nums.length){
+      const ans = parseFloat(correctAnswer);
+      const sorted = [...nums].sort((a,b)=>a-b);
+      const avg = nums.reduce((s,n)=>s+n,0)/nums.length;
+      const median = sorted[Math.floor(sorted.length/2)];
+      const wrongs = nums.filter(n=>n!==ans);
+      let closest=null, closestDiff=null;
+      if(wrongs.length){
+        closest = wrongs.reduce((p,c)=>Math.abs(c-ans)<Math.abs(p-ans)?c:p);
+        closestDiff = Math.abs(closest-ans);
+      }
+      stats = {...stats,
+        avg_answer: Math.round(avg*10)/10,
+        median_answer: median,
+        min_answer: sorted[0],
+        max_answer: sorted[sorted.length-1],
+        closest_wrong: closest,
+        closest_wrong_diff: closestDiff,
+        within_10pct: nums.filter(n=>Math.abs(n-ans)/Math.max(1,Math.abs(ans))<=0.1).length
+      };
+    }
+  }
+  return stats;
+}
+
+function hashEmail(email){
+  let h=0;
+  for(let i=0;i<email.length;i++) h=Math.imul(31,h)+email.charCodeAt(i)|0;
+  return (h>>>0).toString(36);
+}
+
+async function submitResult(){
+  const answer = document.getElementById('rAnswer').value.trim();
+  if(!answer){ msg('rMsg','Enter the correct answer.','err'); return; }
+  if(!currentPuzzle){ msg('rMsg','Load a prop first.','err'); return; }
+  
+  const btn = document.getElementById('submitBtn');
+  btn.disabled = true;
+  btn.textContent = 'Processing…';
+  document.getElementById('winnerBox').classList.remove('show');
+  document.getElementById('noWinner').style.display = 'none';
+  
+  try{
+    const pzWithAns = {...currentPuzzle, correct_answer: answer};
+    
+    // 1. Fetch all entries
+    msg('rMsg','Fetching entries…','info');
+    const er = await fetch(URL+'/rest/v1/entries?date=eq.'+currentPuzzle.date+'&select=*&order=created_at.asc',{
+      headers:{'apikey':KEY,'Authorization':'Bearer '+KEY}
+    });
+    const entries = await er.json();
+    
+    // 2. Determine correct/incorrect
+    const correctIds = entries.filter(e=>isExact(pzWithAns,e.answer)).map(e=>e.id);
+    const wrongIds   = entries.filter(e=>!isExact(pzWithAns,e.answer)).map(e=>e.id);
+    
+    // 3. Mark entries
+    msg('rMsg','Marking entries…','info');
+    if(correctIds.length){
+      await fetch(URL+'/rest/v1/entries?id=in.('+correctIds.join(',')+')',{
+        method:'PATCH',
+        headers:{'apikey':KEY,'Authorization':'Bearer '+KEY,'Content-Type':'application/json','Prefer':'return=minimal'},
+        body:JSON.stringify({correct:true})
+      });
+    }
+    if(wrongIds.length){
+      await fetch(URL+'/rest/v1/entries?id=in.('+wrongIds.join(',')+')',{
+        method:'PATCH',
+        headers:{'apikey':KEY,'Authorization':'Bearer '+KEY,'Content-Type':'application/json','Prefer':'return=minimal'},
+        body:JSON.stringify({correct:false})
+      });
+    }
+    
+    // 4. Compute stats
+    const stats = computeStats(entries, answer, currentPuzzle.answer_type);
+    const winner = correctIds.length ? entries.find(e=>e.id===correctIds[0]) : null;
+    
+    // 5. Save to puzzle
+    msg('rMsg','Saving result…','info');
+    await fetch(URL+'/rest/v1/puzzles?date=eq.'+currentPuzzle.date,{
+      method:'PATCH',
+      headers:{'apikey':KEY,'Authorization':'Bearer '+KEY,'Content-Type':'application/json','Prefer':'return=minimal'},
+      body:JSON.stringify({
+        correct_answer: answer,
+        total_entries: entries.length,
+        correct_entries: correctIds.length,
+        answer_stats: stats,
+        winner_name: winner ? winner.name : 'No winner'
+      })
+    });
+    
+    // 6. Update player stats
+    msg('rMsg','Updating player leaderboard…','info');
+    const hashes = entries.map(e=>hashEmail(e.email.toLowerCase()));
+    const hashIn = hashes.map(h=>'"'+h+'"').join(',');
+    let existing = {};
+    try{
+      const pr = await fetch(URL+'/rest/v1/player_stats?email_hash=in.('+hashIn+')',{
+        headers:{'apikey':KEY,'Authorization':'Bearer '+KEY}
+      });
+      if(pr.ok)(await pr.json()).forEach(p=>existing[p.email_hash]=p);
+    }catch(e){}
+    
+    const upserts = entries.map(entry=>{
+      const hash = hashEmail(entry.email.toLowerCase());
+      const ex = existing[hash]||{wins:0,correct_total:0,entries_total:0,best_streak:0,current_streak:0,last_correct_day:-1};
+      const isCorrect = correctIds.includes(entry.id);
+      const isWinner  = winner && entry.id === winner.id;
+      const lastDay = ex.last_correct_day||-1;
+      const dayNum  = currentPuzzle.day_number||0;
+      const newStreak = isCorrect ? (lastDay===dayNum-1?(ex.current_streak||0)+1:1) : 0;
+      return {
+        email_hash: hash,
+        display_name: entry.name,
+        wins: (ex.wins||0)+(isWinner?1:0),
+        correct_total: (ex.correct_total||0)+(isCorrect?1:0),
+        entries_total: (ex.entries_total||0)+1,
+        best_streak: Math.max(ex.best_streak||0, newStreak),
+        current_streak: newStreak,
+        last_correct_day: isCorrect ? dayNum : (ex.last_correct_day||-1),
+        updated_at: new Date().toISOString()
+      };
+    });
+    
+    for(let i=0;i<upserts.length;i+=50){
+      await fetch(URL+'/rest/v1/player_stats',{
+        method:'POST',
+        headers:{'apikey':KEY,'Authorization':'Bearer '+KEY,'Content-Type':'application/json','Prefer':'resolution=merge-duplicates,return=minimal'},
+        body:JSON.stringify(upserts.slice(i,i+50))
+      });
+    }
+    
+    // 7. Show result
+    msg('rMsg','✓ Done — '+entries.length+' entries processed, '+correctIds.length+' exact.','ok');
+    
+    document.getElementById('wEntries').textContent = entries.length;
+    document.getElementById('wExact').textContent = correctIds.length;
+    
+    if(winner){
+      document.getElementById('wName').textContent = winner.name;
+      document.getElementById('wEmail').textContent = winner.email;
+      document.getElementById('wAnswer').textContent = 'Answer: '+winner.answer+' · Submitted: '+new Date(winner.created_at).toLocaleTimeString([],{hour:'numeric',minute:'2-digit'});
+      document.getElementById('winnerBox').classList.add('show');
+    } else {
+      document.getElementById('noWinner').style.display = 'block';
+    }
+    
+  }catch(e){
+    msg('rMsg','Error: '+e.message,'err');
+  }
+  
+  btn.disabled = false;
+  btn.textContent = 'Save Answer & Process Everything';
+}
+
+// Init
+if(loadSavedCreds()){
+  document.getElementById('connectBtn').textContent = 'Continue →';
+}
+</script>
+</body>
+</html>
