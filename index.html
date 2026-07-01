@@ -991,6 +991,92 @@ body {
   letter-spacing: .01em;
 }
 
+/* ─── DISTRIBUTION DOT CHART ────────────────────────────────── */
+.dist-consensus {
+  font-size: 13px;
+  color: rgba(255,255,255,.55);
+  margin-bottom: 16px;
+  line-height: 1.5;
+}
+.dist-consensus strong { color: #fff; }
+.dist-chart {
+  margin: 8px 0 12px;
+  padding: 0 8px;
+}
+.dist-track {
+  position: relative;
+  height: 70px;
+  background: rgba(255,255,255,.04);
+  border-radius: 8px;
+  margin-bottom: 6px;
+  border: 1px solid rgba(255,255,255,.06);
+}
+.dist-dot-wrap {
+  position: absolute;
+  transform: translateX(-50%);
+  bottom: 8px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+}
+.dist-dot {
+  border-radius: 50%;
+  transition: transform .15s;
+  cursor: default;
+  flex-shrink: 0;
+}
+.dist-dot-label {
+  font-size: 9px;
+  font-weight: 700;
+  white-space: nowrap;
+  line-height: 1;
+}
+.dist-correct-line {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  transform: translateX(-50%);
+  width: 2px;
+  background: rgba(0,184,107,.5);
+  pointer-events: none;
+}
+.dcl-label {
+  position: absolute;
+  top: 4px;
+  left: 5px;
+  font-size: 9px;
+  font-weight: 700;
+  color: #00b86b;
+  white-space: nowrap;
+  letter-spacing: .04em;
+}
+.dist-axis {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 9.5px;
+  color: rgba(255,255,255,.25);
+  font-weight: 600;
+  padding: 0 4px;
+}
+.dist-nearmiss {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 12px;
+  color: #ffa800;
+  font-weight: 600;
+  margin-bottom: 8px;
+}
+.nm-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #ffa800;
+  flex-shrink: 0;
+}
+
 /* ─── RECORD PANE ───────────────────────────────────────────── */
 .record-stat-grid {
   display: grid;
@@ -1141,9 +1227,9 @@ body {
       </div>
       <div class="record-stat-grid" id="recordStats">
         <div class="rsb"><div class="rsn" id="rP">0</div><div class="rsl">Played</div></div>
-        <div class="rsb"><div class="rsn" id="rW">0%</div><div class="rsl">Hit %</div></div>
+        <div class="rsb"><div class="rsn" id="rW">0</div><div class="rsl">Exact hits</div></div>
         <div class="rsb"><div class="rsn" id="rS">0</div><div class="rsl">Streak</div></div>
-        <div class="rsb"><div class="rsn" id="rM">0</div><div class="rsl">Best</div></div>
+        <div class="rsb"><div class="rsn" id="rM">0</div><div class="rsl">Best streak</div></div>
       </div>
       <div style="font-family:'Figtree',sans-serif;font-size:9px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:rgba(255,255,255,.3);margin:18px 0 8px;">Last 20 props</div>
       <div class="form-dots" id="recordDots"></div>
@@ -1271,9 +1357,12 @@ const D_PUZZLE = {
   prize: "Amazon gift card", prize_value: "$50"
 };
 const D_HIST = [
-  {date:"2026-06-23",day_number:3,sport:"NBA",game:"Celtics @ Lakers",question:"How many points scored in the 3rd quarter combined?",answer_type:"number",correct_answer:"61",total_entries:284,correct_entries:2,winner_name:"Marcus",prize:"Amazon gift card",prize_value:"$50",answer_stats:{top_answers:[{answer:"65",count:47,correct:false},{answer:"61",count:2,correct:true},{answer:"58",count:38,correct:false},{answer:"70",count:28,correct:false},{answer:"55",count:18,correct:false}],unique_answers:89,avg_answer:64.2,median_answer:63,closest_wrong:62,closest_wrong_diff:1,min_answer:38,max_answer:112,within_10pct:52}},
-  {date:"2026-06-22",day_number:2,sport:"NFL",game:"Chiefs @ Bills",question:"How many rushing yards does the starting QB rack up?",answer_type:"number",correct_answer:"23",total_entries:312,correct_entries:0,winner_name:null,prize:"Amazon gift card",prize_value:"$50",answer_stats:{top_answers:[{answer:"45",count:61,correct:false},{answer:"30",count:54,correct:false},{answer:"20",count:48,correct:false},{answer:"35",count:42,correct:false},{answer:"50",count:38,correct:false}],unique_answers:74,avg_answer:38.1,median_answer:35,closest_wrong:24,closest_wrong_diff:1,min_answer:0,max_answer:150,within_10pct:0}},
-  {date:"2026-06-21",day_number:1,sport:"MLB",game:"Dodgers @ Braves",question:"Which pitcher throws the first strikeout?",answer_type:"text",correct_answer:"Yoshinobu Yamamoto",total_entries:198,correct_entries:11,winner_name:"Tyler",prize:"Amazon gift card",prize_value:"$50",answer_stats:{top_answers:[{answer:"Yoshinobu Yamamoto",count:11,correct:true},{answer:"Spencer Strider",count:44,correct:false},{answer:"Charlie Morton",count:21,correct:false},{answer:"Max Fried",count:18,correct:false}],unique_answers:41}},
+  {date:"2026-06-23",day_number:3,sport:"NBA",game:"Celtics @ Lakers",question:"How many points scored in the 3rd quarter combined?",answer_type:"number",correct_answer:"61",total_entries:284,correct_entries:2,winner_name:"Marcus",prize:"Amazon gift card",prize_value:"$50",
+   answer_stats:{top_answers:[{answer:"57",count:12,correct:false},{answer:"58",count:19,correct:false},{answer:"59",count:22,correct:false},{answer:"60",count:31,correct:false},{answer:"61",count:2,correct:true},{answer:"62",count:28,correct:false},{answer:"63",count:18,correct:false},{answer:"65",count:47,correct:false},{answer:"68",count:35,correct:false},{answer:"70",count:28,correct:false},{answer:"72",count:14,correct:false},{answer:"75",count:9,correct:false}],unique_answers:89,avg_answer:64.2,median_answer:63,closest_wrong:62,closest_wrong_diff:1,min_answer:38,max_answer:112,within_10pct:52}},
+  {date:"2026-06-22",day_number:2,sport:"NFL",game:"Chiefs @ Bills",question:"How many rushing yards does the starting QB rack up?",answer_type:"number",correct_answer:"23",total_entries:312,correct_entries:0,winner_name:null,prize:"Amazon gift card",prize_value:"$50",
+   answer_stats:{top_answers:[{answer:"18",count:21,correct:false},{answer:"20",count:48,correct:false},{answer:"22",count:31,correct:false},{answer:"24",count:27,correct:false},{answer:"25",count:38,correct:false},{answer:"30",count:54,correct:false},{answer:"35",count:42,correct:false},{answer:"40",count:33,correct:false},{answer:"45",count:61,correct:false},{answer:"50",count:38,correct:false}],unique_answers:74,avg_answer:38.1,median_answer:35,closest_wrong:24,closest_wrong_diff:1,min_answer:0,max_answer:150,within_10pct:0}},
+  {date:"2026-06-21",day_number:1,sport:"MLB",game:"Dodgers @ Braves",question:"Which pitcher throws the first strikeout?",answer_type:"text",correct_answer:"Yoshinobu Yamamoto",total_entries:198,correct_entries:11,winner_name:"Tyler",prize:"Amazon gift card",prize_value:"$50",
+   answer_stats:{top_answers:[{answer:"Yoshinobu Yamamoto",count:11,correct:true},{answer:"Spencer Strider",count:44,correct:false},{answer:"Charlie Morton",count:21,correct:false},{answer:"Max Fried",count:18,correct:false}],unique_answers:41}},
 ];
 const D_PLAYERS = [
   {display_name:"Marcus T.",wins:3,correct_total:11,entries_total:21,best_streak:3,current_streak:1},
@@ -1986,9 +2075,14 @@ function renderHistory(rows){
           <div class="hi-divider"></div>
           <div class="hi-stat"><div class="n">${cor}</div><div class="l">exact</div></div>
           <div class="hi-divider"></div>
-          <div class="pct-bar">
-            <div class="hi-stat" style="margin-bottom:3px"><div class="n">${pct}%</div><div class="l">hit rate</div></div>
-            <div class="pct-track"><div class="pct-fill" style="width:${Math.max(2,parseFloat(pct))}%"></div></div>
+          <div class="hi-stat">
+            <div class="n" style="color:#ffa800">${(()=>{
+              const st=r.answer_stats;
+              if(!st||r.answer_type!=='number') return '—';
+              const ca=parseFloat(r.correct_answer);
+              return (st.top_answers||[]).filter(a=>!a.correct&&Math.abs(parseFloat(a.answer)-ca)<=2).reduce((s,a)=>s+a.count,0);
+            })()}</div>
+            <div class="l">near misses</div>
           </div>
         </div>
         ${hasW?`<div class="hi-winner">🏆 ${r.winner_name} won ${(r.prize_value||"")+" "+r.prize}</div>`:`<div class="hi-no-winner">${cor===0?"Nobody got this one":"Winner notified"}</div>`}
@@ -2019,45 +2113,109 @@ window.toggleBd = function(i){
 };
 
 function buildBd(r, st, isNum){
-  const top = st.top_answers||[];
-  const maxC = top.length ? Math.max(...top.map(a=>a.count)) : 1;
+  const top = st.top_answers || [];
+  const correctAns = parseFloat(r.correct_answer);
 
-  let insight = "";
-  if(isNum && st.avg_answer != null){
-    const diff = Math.abs(st.avg_answer - parseFloat(r.correct_answer));
-    insight = `<span class="bp-insight">crowd avg ${fmtN(st.avg_answer)} — ${diff<2?"nearly spot on":diff<8?"just off":"off by "+Math.round(diff)}</span>`;
+  // ── DISTRIBUTION DOT CHART (number props only) ─────────────────
+  let distHTML = "";
+  if(isNum && top.length > 0){
+    // Collect all answers with counts
+    const allAnswers = top.map(a => ({val: parseFloat(a.answer), count: a.count, correct: a.correct}))
+                         .filter(a => !isNaN(a.val))
+                         .sort((a,b) => a.val - b.val);
+
+    if(allAnswers.length > 1){
+      const vals = allAnswers.map(a => a.val);
+      const minV = Math.min(...vals, correctAns) - 1;
+      const maxV = Math.max(...vals, correctAns) + 1;
+      const range = maxV - minV || 1;
+
+      // Consensus line
+      const avgGuess = st.avg_answer;
+      const consensusDiff = avgGuess != null ? Math.round(Math.abs(avgGuess - correctAns) * 10) / 10 : null;
+      const consensusLine = avgGuess != null
+        ? `<div class="dist-consensus">Crowd avg <strong>${fmtN(avgGuess)}</strong> — the answer was <strong style="color:#00b86b">${fmtN(r.correct_answer)}</strong>${consensusDiff > 0 ? ` <span style="color:rgba(255,255,255,.4)">(${consensusDiff} off)</span>` : ' <span style="color:#00b86b">✓ spot on</span>'}</div>`
+        : '';
+
+      // Build dot chart
+      // Each answer gets a column of dots, sized by count
+      const maxCount = Math.max(...allAnswers.map(a => a.count));
+      const nearMissCount = allAnswers.filter(a => !a.correct && Math.abs(a.val - correctAns) <= 2).reduce((s,a) => s+a.count, 0);
+
+      const dots = allAnswers.map(a => {
+        const pct = ((a.val - minV) / range * 100).toFixed(1);
+        const isCorrect = a.correct;
+        const isNear = !isCorrect && Math.abs(a.val - correctAns) <= 2;
+        const dotColor = isCorrect ? '#00b86b' : isNear ? '#ffa800' : 'rgba(255,255,255,0.18)';
+        const size = Math.max(8, Math.min(22, 8 + (a.count / maxCount) * 14));
+        return `<div class="dist-dot-wrap" style="left:${pct}%">
+          <div class="dist-dot" style="width:${size}px;height:${size}px;background:${dotColor};${isCorrect?'box-shadow:0 0 8px rgba(0,184,107,.6)':''}" title="${a.val} (${a.count} guess${a.count!==1?'es':''})">
+          </div>
+          <div class="dist-dot-label" style="color:${isCorrect?'#00b86b':isNear?'#ffa800':'rgba(255,255,255,.35)'}">${a.val}</div>
+        </div>`;
+      }).join('');
+
+      // Correct answer marker line
+      const correctPct = ((correctAns - minV) / range * 100).toFixed(1);
+
+      distHTML = `
+        ${consensusLine}
+        <div class="dist-chart">
+          <div class="dist-track">
+            ${dots}
+            <div class="dist-correct-line" style="left:${correctPct}%">
+              <div class="dcl-label">✓ ${fmtN(r.correct_answer)}</div>
+            </div>
+          </div>
+          <div class="dist-axis">
+            <span>${fmtN(minV+1)}</span>
+            <span style="color:rgba(255,255,255,.2);font-size:9px">← spread of all guesses →</span>
+            <span>${fmtN(maxV-1)}</span>
+          </div>
+        </div>
+        ${nearMissCount > 0 ? `<div class="dist-nearmiss"><span class="nm-dot"></span>${nearMissCount} near miss${nearMissCount!==1?'es':''} (within 2)</div>` : ''}`;
+    }
   }
 
-  const bars = top.map(a=>{
+  // ── TOP ANSWERS BARS ───────────────────────────────────────────
+  const maxC = top.length ? Math.max(...top.map(a=>a.count)) : 1;
+  const bars = top.map(a => {
     const w = Math.max(5, Math.round((a.count/maxC)*100));
-    const disp = a.answer.length > 16 ? a.answer.slice(0,15)+"…" : a.answer;
+    const disp = a.answer.length > 16 ? a.answer.slice(0,15)+'…' : a.answer;
+    const isNear = isNum && !a.correct && Math.abs(parseFloat(a.answer) - correctAns) <= 2;
+    const barColor = a.correct ? 'rgba(0,184,107,.3)' : isNear ? 'rgba(255,168,0,.2)' : 'rgba(255,255,255,.1)';
     return `<div class="a-bar">
       <span class="a-bar-ans" title="${a.answer}">${disp}</span>
-      <div class="a-bar-track"><div class="a-bar-fill${a.correct?" correct-bar":""}" style="width:${w}%"></div></div>
+      <div class="a-bar-track"><div class="a-bar-fill" style="width:${w}%;background:${barColor}"></div></div>
       <span class="a-bar-count">${a.count}</span>
-      ${a.correct?`<span class="a-bar-tag">✓</span>`:""}
+      ${a.correct ? '<span class="a-bar-tag">✓</span>' : isNear ? '<span class="a-bar-tag" style="color:#ffa800">~near</span>' : ''}
     </div>`;
-  }).join("");
+  }).join('');
 
+  // ── NUMBER STATS (simplified — no hit rate) ───────────────────
   let numStats = "";
   if(isNum){
-    const cw = st.closest_wrong != null ? fmtN(st.closest_wrong)+(st.closest_wrong_diff!=null?" ("+st.closest_wrong_diff+" off)":"") : "—";
-    const range = (st.min_answer!=null&&st.max_answer!=null) ? fmtN(st.min_answer)+"–"+fmtN(st.max_answer) : "—";
-    const w10 = st.within_10pct != null ? `<div class="ns-sub">${st.within_10pct} within 10%</div>` : "";
-    numStats = `<div class="num-stats-grid">
+    const nearTotal = top.filter(a => !a.correct && Math.abs(parseFloat(a.answer)-correctAns)<=2).reduce((s,a)=>s+a.count,0);
+    const exactTotal = top.filter(a=>a.correct).reduce((s,a)=>s+a.count,0);
+    numStats = `<div class="num-stats-grid" style="margin-top:12px;">
       <div class="ns-box"><div class="ns-v">${st.avg_answer!=null?fmtN(st.avg_answer):"—"}</div><div class="ns-l">Avg guess</div></div>
-      <div class="ns-box"><div class="ns-v">${st.median_answer!=null?fmtN(st.median_answer):"—"}</div><div class="ns-l">Median</div></div>
-      <div class="ns-box"><div class="ns-v">${cw}</div><div class="ns-l">Closest miss</div></div>
-      <div class="ns-box"><div class="ns-v">${range}</div><div class="ns-l">Range</div>${w10}</div>
+      <div class="ns-box"><div class="ns-v">${st.median_answer!=null?fmtN(st.median_answer):"—"}</div><div class="ns-l">Median guess</div></div>
+      <div class="ns-box"><div class="ns-v" style="color:#ffa800">${nearTotal}</div><div class="ns-l">Near misses (±2)</div></div>
+      <div class="ns-box"><div class="ns-v" style="color:#00b86b">${exactTotal}</div><div class="ns-l">Exact hits</div></div>
     </div>`;
   }
 
-  const uniq = st.unique_answers != null ? `<div class="unique-note">${st.unique_answers} unique answers submitted</div>` : "";
+  const uniq = st.unique_answers != null
+    ? `<div class="unique-note">${st.unique_answers} unique answers submitted</div>`
+    : "";
 
-  return `<div class="bp-label">Most popular guesses ${insight}</div>
+  return `<div class="bp-inner">
+    ${distHTML}
+    ${distHTML ? '<div class="bp-label" style="margin-top:16px;">Most popular guesses</div>' : '<div class="bp-label">Most popular guesses</div>'}
     ${bars}
     ${numStats}
-    ${uniq}`;
+    ${uniq}
+  </div>`;
 }
 
 
@@ -2167,7 +2325,7 @@ document.getElementById("sortPills")?.addEventListener("click",e=>{
 // Record pane
 function renderRecord(){
   document.getElementById("rP").textContent=stats.played;
-  document.getElementById("rW").textContent=stats.played?Math.round((stats.wins/stats.played)*100)+"%":"0%";
+  document.getElementById("rW").textContent=stats.wins||0;
   document.getElementById("rS").textContent=stats.streak;
   document.getElementById("rM").textContent=stats.maxStreak;
   const d=document.getElementById("recordDots");
