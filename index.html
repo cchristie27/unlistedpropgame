@@ -1212,9 +1212,10 @@ body {
         <p style="font-size:12px;color:rgba(255,255,255,.3);margin:0;">Updated after each result posts</p>
       </div>
       <div class="sort-pills" id="sortPills">
-        <button class="sort-pill active" data-sort="wins">🏆 Most Wins</button>
-        <button class="sort-pill" data-sort="correct">🎯 Sharpest</button>
-        <button class="sort-pill" data-sort="entries">📅 Most Active</button>
+        <button class="sort-pill active" data-sort="wins">🏆 Wins</button>
+        <button class="sort-pill" data-sort="correct">🎯 Exact</button>
+        <button class="sort-pill" data-sort="nearmiss">~ Near Misses</button>
+        <button class="sort-pill" data-sort="entries">📅 Active</button>
       </div>
       <div id="playerList"></div>
     </div>
@@ -1365,12 +1366,12 @@ const D_HIST = [
    answer_stats:{top_answers:[{answer:"Yoshinobu Yamamoto",count:11,correct:true},{answer:"Spencer Strider",count:44,correct:false},{answer:"Charlie Morton",count:21,correct:false},{answer:"Max Fried",count:18,correct:false}],unique_answers:41}},
 ];
 const D_PLAYERS = [
-  {display_name:"Marcus T.",wins:3,correct_total:11,entries_total:21,best_streak:3,current_streak:1},
-  {display_name:"Tyler J.",wins:2,correct_total:8,entries_total:14,best_streak:2,current_streak:0},
-  {display_name:"Jordan K.",wins:1,correct_total:15,entries_total:28,best_streak:4,current_streak:2},
-  {display_name:"Sam W.",wins:1,correct_total:6,entries_total:18,best_streak:2,current_streak:0},
-  {display_name:"Casey M.",wins:0,correct_total:9,entries_total:19,best_streak:3,current_streak:3},
-  {display_name:"Alex R.",wins:0,correct_total:7,entries_total:16,best_streak:2,current_streak:0},
+  {display_name:"Marcus T.",wins:3,correct_total:11,near_miss_total:8,entries_total:21,best_streak:3,current_streak:1},
+  {display_name:"Tyler J.",wins:2,correct_total:8,near_miss_total:12,entries_total:14,best_streak:2,current_streak:0},
+  {display_name:"Jordan K.",wins:1,correct_total:15,near_miss_total:19,entries_total:28,best_streak:4,current_streak:2},
+  {display_name:"Sam W.",wins:1,correct_total:6,near_miss_total:7,entries_total:18,best_streak:2,current_streak:0},
+  {display_name:"Casey M.",wins:0,correct_total:9,near_miss_total:14,entries_total:19,best_streak:3,current_streak:3},
+  {display_name:"Alex R.",wins:0,correct_total:7,near_miss_total:9,entries_total:16,best_streak:2,current_streak:0},
   {display_name:"Devon B.",wins:0,correct_total:5,entries_total:12,best_streak:2,current_streak:1},
   {display_name:"Riley S.",wins:0,correct_total:4,entries_total:11,best_streak:2,current_streak:0},
   {display_name:"Quinn L.",wins:0,correct_total:3,entries_total:9,best_streak:1,current_streak:0},
@@ -2021,6 +2022,16 @@ async function loadHistory(){
   }catch(e){hz.innerHTML='<div class="empty-msg">Couldn\'t load. Check connection.</div>';}
 }
 
+
+function nearMissCount(r){
+  try{
+    const st = r.answer_stats;
+    if(!st || r.answer_type !== 'number') return '—';
+    const ca = parseFloat(r.correct_answer);
+    return (st.top_answers||[]).filter(a=>!a.correct && Math.abs(parseFloat(a.answer)-ca)<=2).reduce((s,a)=>s+a.count,0);
+  }catch(e){ return '—'; }
+}
+
 function renderHistory(rows){
   const hz = document.getElementById("histZone");
   const te = rows.reduce((s,r)=>s+(r.total_entries||0),0);
@@ -2076,12 +2087,7 @@ function renderHistory(rows){
           <div class="hi-stat"><div class="n">${cor}</div><div class="l">exact</div></div>
           <div class="hi-divider"></div>
           <div class="hi-stat">
-            <div class="n" style="color:#ffa800">${(()=>{
-              const st=r.answer_stats;
-              if(!st||r.answer_type!=='number') return '—';
-              const ca=parseFloat(r.correct_answer);
-              return (st.top_answers||[]).filter(a=>!a.correct&&Math.abs(parseFloat(a.answer)-ca)<=2).reduce((s,a)=>s+a.count,0);
-            })()}</div>
+            <div class="n" style="color:#ffa800">${nearMissCount(r)}</div>
             <div class="l">near misses</div>
           </div>
         </div>
@@ -2236,14 +2242,15 @@ async function loadPlayers(force){
     playersLoaded = true;
     renderPlayers();
   }catch(e){
-    pz.innerHTML='<div class="empty-msg">Could not load. Check connection.</div>';
+    console.error("Players error:", e);
+    pz.innerHTML='<div class="empty-msg" style="color:rgba(255,255,255,.4);padding:30px 20px;text-align:center;">No player data yet.<br><span style="font-size:11px;">Updates after each result is posted.</span></div>';
   }
 }
 
 function renderPlayers(){
   const pz = document.getElementById("playerList");
   if(!pz||!playersData.length){
-    if(pz) pz.innerHTML='<div class="empty-msg">No player data yet.<br>Comes live once results start posting.</div>';
+    if(pz) pz.innerHTML='<div class="empty-msg" style="color:rgba(255,255,255,.4);padding:30px 20px;text-align:center;">No player data yet.<br><span style="font-size:11px;">Updates after each result is posted.</span></div>';
     return;
   }
   let sorted = [...playersData];
@@ -2255,28 +2262,50 @@ function renderPlayers(){
       const rb = b.entries_total>=3 ? b.correct_total/b.entries_total : -1;
       return rb-ra || b.correct_total-a.correct_total;
     });
+  } else if(playerSort === "nearmiss"){
+    sorted.sort((a,b)=> (b.near_miss_total||0)-(a.near_miss_total||0) || b.correct_total-a.correct_total);
   } else {
     sorted.sort((a,b)=> b.entries_total-a.entries_total || b.correct_total-a.correct_total);
   }
 
   const rows = sorted.slice(0,50).map((p,i)=>{
     const rank = i+1;
-    const pct = p.entries_total ? Math.round((p.correct_total/p.entries_total)*100) : 0;
+    const earned = (p.wins||0) * 50;
+    const nearMiss = p.near_miss_total||0;
     const rankClass = rank===1?"rank-gold":rank===2?"rank-silver":rank===3?"rank-bronze":"";
     const streakStr = p.current_streak > 1 ? `<span class="pstreak">🔥${p.current_streak}</span>` : "";
-    const activeCol = playerSort==="wins"?"wins":playerSort==="correct"?"pct":"entries_total";
+    const hiWins    = playerSort==="wins";
+    const hiCorrect = playerSort==="correct";
+    const hiNear    = playerSort==="nearmiss";
+    const hiEntries = playerSort==="entries";
     return `<div class="player-row${rank<=3?" top-three":""}">
       <div class="player-rank ${rankClass}">${rank<=3?"⬤":rank}</div>
       <div class="player-info">
         <div class="player-name">${p.display_name} ${streakStr}</div>
         <div class="player-stats-row">
-          <span class="pstat${activeCol==="wins"?" pstat-hi":""}"><span class="pstat-n">${p.wins}</span><span class="pstat-l">Wins</span></span>
-          <span class="pstat${activeCol==="pct"?" pstat-hi":""}"><span class="pstat-n">${p.correct_total}</span><span class="pstat-l">Exact</span></span>
-          <span class="pstat${activeCol==="entries_total"?" pstat-hi":""}"><span class="pstat-n">${p.entries_total}</span><span class="pstat-l">Played</span></span>
-          <span class="pstat"><span class="pstat-n">${pct}%</span><span class="pstat-l">Hit%</span></span>
+          <span class="pstat${hiWins?" pstat-hi":""}">
+            <span class="pstat-n">${p.wins||0}</span>
+            <span class="pstat-l">Wins</span>
+          </span>
+          <span class="pstat${hiWins?" pstat-hi":""}" style="color:${earned>0?'#ffa800':''}">
+            <span class="pstat-n" style="${earned>0?'color:#ffa800':''}">$${earned}</span>
+            <span class="pstat-l">Earned</span>
+          </span>
+          <span class="pstat${hiCorrect?" pstat-hi":""}">
+            <span class="pstat-n">${p.correct_total||0}</span>
+            <span class="pstat-l">Exact</span>
+          </span>
+          <span class="pstat${hiNear?" pstat-hi":""}">
+            <span class="pstat-n" style="${hiNear?'color:#ffa800':''}">${nearMiss}</span>
+            <span class="pstat-l">Near</span>
+          </span>
+          <span class="pstat${hiEntries?" pstat-hi":""}">
+            <span class="pstat-n">${p.entries_total||0}</span>
+            <span class="pstat-l">Played</span>
+          </span>
         </div>
       </div>
-      ${p.wins>0?'<div class="player-badge">🏆</div>':''}
+      ${earned>0?`<div class="player-badge" style="font-size:13px;color:#ffa800;font-weight:700">$${earned}</div>`:''}
     </div>`;
   }).join("");
 
@@ -2360,6 +2389,7 @@ setInterval(tickRecord,1000);
 // Init
 rh();
 (async function(){
+  try{
   const existing=loadEntry();
   const puzzle=DEMO?D_PUZZLE:await sbGet("puzzles","date=eq."+TODAY+"&select=*").catch(()=>null);
   if(!puzzle){
@@ -2367,6 +2397,7 @@ rh();
     return;
   }
   // prize banner removed from UI
+  // prize banner elements removed from HTML - no-op
   if(isLocked(puzzle) && !existing){
     renderGameLocked(puzzle);
   } else if(existing){
@@ -2374,6 +2405,10 @@ rh();
     else renderLocked(puzzle,existing);
   } else {
     renderPick(puzzle);
+  }
+  }catch(err){
+    console.error("Init:",err);
+    zone.innerHTML='<div style="text-align:center;padding:40px 20px;color:#e8324a;font-size:13px;">Error: '+err.message+'</div>';
   }
 })();
 
